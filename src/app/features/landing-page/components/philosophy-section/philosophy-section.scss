@@ -1,0 +1,21 @@
+.philosophy-headline {
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.philosophy-img-wrapper {
+  filter: saturate(0.8) contrast(1.05);
+}
+
+.philosophy-badge {
+  border-top: 2px solid #ff8a95;
+}
+
+.philosophy-pillar {
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #20201f;
+  }
+}

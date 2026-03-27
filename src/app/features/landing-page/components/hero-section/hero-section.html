@@ -1,0 +1,63 @@
+<section class="hero-section relative flex flex-col justify-end min-h-screen overflow-hidden">
+  <div
+    class="hero-bg-image absolute inset-0 bg-cover bg-center bg-no-repeat"
+    style="background-image: url('https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=1920&q=80&fit=crop')"
+  ></div>
+
+  <div class="hero-bg-overlay absolute inset-0"></div>
+
+  <div class="hero-noise absolute inset-0 pointer-events-none"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto w-full px-6 lg:px-12 pb-20 lg:pb-28 pt-40">
+    <div class="max-w-4xl">
+      <p class="hero-kicker font-space text-xs uppercase tracking-[0.25em] text-lp-lime mb-6">
+        Fulgaro &bull; Corpo e Mente &bull; Running
+      </p>
+
+      <h1 class="hero-headline font-lexend font-black text-lp-text leading-none mb-8 overflow-hidden">
+        <span class="word block">ACCENDI</span>
+        <span class="word block">LE TUE</span>
+        <span class="word block text-lp-lime">PRESTAZIONI</span>
+      </h1>
+
+      <p class="hero-sub font-lexend font-light text-lp-muted text-lg lg:text-xl leading-relaxed mb-12 max-w-xl">
+        Allenamenti di gruppo e coaching individuale a Roma.
+        Un metodo che unisce corpo e mente per trasformare ogni atleta.
+      </p>
+
+      <div class="hero-cta-group flex flex-col sm:flex-row gap-4 mb-20 lg:mb-24">
+        <button
+          class="cta-primary font-lexend font-semibold text-sm uppercase tracking-widest px-8 py-4 text-white transition-transform duration-200 hover:scale-105"
+          (click)="scrollToCta()"
+        >
+          Inizia Ora
+        </button>
+        <button
+          class="cta-secondary font-lexend font-semibold text-sm uppercase tracking-widest px-8 py-4 text-lp-lime transition-all duration-200 hover:bg-white/5"
+          (click)="scrollToPrograms()"
+        >
+          Scopri i Programmi
+        </button>
+      </div>
+
+      <div class="hero-stats-row flex flex-wrap gap-8 lg:gap-16 border-t border-white/10 pt-8">
+        <div class="hero-stats-item">
+          <p class="font-lexend font-black text-3xl lg:text-4xl text-lp-lime">250<span class="text-lp-lime-c">+</span></p>
+          <p class="font-space text-xs uppercase tracking-widest text-lp-muted mt-1">Atleti Seguiti</p>
+        </div>
+        <div class="hero-stats-item">
+          <p class="font-lexend font-black text-3xl lg:text-4xl text-lp-lime">5</p>
+          <p class="font-space text-xs uppercase tracking-widest text-lp-muted mt-1">Sedi a Roma</p>
+        </div>
+        <div class="hero-stats-item">
+          <p class="font-lexend font-black text-3xl lg:text-4xl text-lp-lime">2</p>
+          <p class="font-space text-xs uppercase tracking-widest text-lp-muted mt-1">Programmi</p>
+        </div>
+        <div class="hero-stats-item">
+          <p class="font-lexend font-black text-3xl lg:text-4xl text-lp-lime">7<span class="text-lp-lime-c">/7</span></p>
+          <p class="font-space text-xs uppercase tracking-widest text-lp-muted mt-1">Giorni Attivi</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,55 @@
+.nav-bar {
+  background: transparent;
+
+  &.scrolled {
+    background: rgba(14, 14, 14, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 40px rgba(255, 43, 64, 0.04);
+  }
+}
+
+.nav-link {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #ff8a95;
+    transition: width 0.25s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+.cta-btn {
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+::ng-deep .mobile-drawer {
+  background: #131313 !important;
+  border-left: none !important;
+
+  .p-drawer-header {
+    background: #131313;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+  }
+
+  .p-drawer-content {
+    background: #131313;
+    padding: 1.5rem;
+  }
+}

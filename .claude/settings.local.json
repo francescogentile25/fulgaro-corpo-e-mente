@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx ng:*)",
+      "Bash(dir \"C:\\\\Users\\\\francesco.gentile\\\\Desktop\\\\SchedeDamiano\\\\src\\\\assets\\\\img\")",
+      "Bash(find /c/Users/francesco.gentile/Desktop/SchedeDamiano/src -type f \\\\\\(-name *.html -o -name *.ts -o -name *.scss -o -name *.css -o -name *.json -o -name *.js \\\\\\))",
+      "Bash(find /c/Users/francesco.gentile/Desktop/SchedeDamiano/src/app/features/landing-page/components -name *.html -type f)",
+      "Bash(grep -r \"cafd00\\\\|f3ffca\\\\|516700\\\\|lp-lime\\\\|lp-lime-c\" /c/Users/francesco.gentile/Desktop/SchedeDamiano/src --include=*.html --include=*.ts --include=*.scss --include=*.css --include=*.json --include=*.js)",
+      "Bash(grep -rn \"lp-lime\\\\|ffd6da\\\\|ff2b40\\\\|f3ffca\\\\|cafd00\\\\|516700\" /c/Users/francesco.gentile/Desktop/SchedeDamiano/src/app/features/landing-page --include=*.html --include=*.ts --include=*.scss --include=*.css --include=*.json --include=*.js)",
+      "Bash(grep -rn \"rgba\\(243, 255, 202\\\\|rgba\\(255, 214, 218\\\\|rgba\\(255, 43, 64\" /c/Users/francesco.gentile/Desktop/SchedeDamiano/src/app/features/landing-page --include=*.html --include=*.scss --include=*.css)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}

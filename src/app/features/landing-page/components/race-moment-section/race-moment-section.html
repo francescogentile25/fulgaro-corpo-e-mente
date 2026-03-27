@@ -1,0 +1,46 @@
+<section class="race-moment-section bg-lp-bg py-24 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <div class="race-moment-header grid lg:grid-cols-12 gap-6 mb-16 lg:mb-20">
+      <div class="lg:col-span-5">
+        <p class="font-space text-xs uppercase tracking-[0.25em] text-lp-lime mb-6">Cattura l'istante</p>
+        <h2 class="race-moment-headline font-lexend font-black text-lp-text leading-none">
+          MOMENTI<br><span class="text-lp-lime">DI CORSA</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-7 flex items-end">
+        <p class="font-lexend font-light text-lp-muted text-lg leading-relaxed">
+          Ogni gara, ogni allenamento, ogni traguardo è un frammento
+          della tua evoluzione come atleta.
+        </p>
+      </div>
+    </div>
+
+    <div class="moments-grid grid grid-cols-2 lg:grid-cols-3 auto-rows-[200px] lg:auto-rows-[240px] gap-px">
+      @for (moment of moments; track moment.label; let i = $index) {
+        <div
+          class="moment-cell relative overflow-hidden cursor-pointer group"
+          [class]="'moment-cell ' + moment.span"
+        >
+          <img
+            [src]="moment.image"
+            [alt]="moment.label"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+
+          <div class="moment-overlay absolute inset-0 transition-opacity duration-400"></div>
+
+          <div class="absolute inset-0 flex flex-col justify-end p-5 lg:p-8">
+            <p class="font-space text-xs uppercase tracking-widest text-lp-lime mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {{ moment.label }}
+            </p>
+            <p class="font-lexend text-sm text-lp-text leading-snug opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 max-w-xs">
+              {{ moment.description }}
+            </p>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</section>

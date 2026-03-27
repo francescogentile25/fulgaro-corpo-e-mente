@@ -1,0 +1,20 @@
+<section class="stats-strip-section bg-lp-bg-low py-16 lg:py-20">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-0">
+      @for (stat of stats; track stat.label; let i = $index) {
+        <div
+          class="stats-strip-item flex flex-col justify-center px-6 lg:px-10 py-8 lg:py-12"
+          [class.border-l]="i > 0"
+          [class.border-lp-muted]="i > 0"
+          [style.border-color]="i > 0 ? 'rgba(173,170,170,0.12)' : ''"
+        >
+          <p class="font-lexend font-black text-lp-yellow leading-none mb-2 stat-number">
+            {{ formatValue(stat) }}<span class="text-lp-lime">{{ stat.suffix }}</span>
+          </p>
+          <p class="font-lexend font-semibold text-lp-text text-base lg:text-lg mb-1">{{ stat.label }}</p>
+          <p class="font-space text-lp-muted text-xs uppercase tracking-wider">{{ stat.description }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,67 @@
+<section id="testimonianze" class="testimonials-section bg-lp-bg py-24 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <div class="testimonials-header grid lg:grid-cols-12 gap-6 mb-16 lg:mb-20">
+      <div class="lg:col-span-5">
+        <p class="font-space text-xs uppercase tracking-[0.25em] text-lp-lime mb-6">Risultati reali</p>
+        <h2 class="testimonials-headline font-lexend font-black text-lp-text leading-none">
+          ATLETI CHE<br><span class="text-lp-lime">EVOLVONO</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-7 flex items-end">
+        <p class="font-lexend font-light text-lp-muted text-lg leading-relaxed">
+          Non promettiamo miracoli. Promettiamo un metodo scientifico,
+          dati precisi e un coach che c'è davvero.
+        </p>
+      </div>
+    </div>
+
+    <div class="testimonials-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5">
+      @for (t of testimonials; track t.name; let i = $index) {
+        <div
+          class="testimonial-card bg-lp-bg-high p-6 lg:p-8 flex flex-col cursor-pointer transition-all duration-300"
+          [class.testimonial-card--active]="activeIndex() === i"
+          (click)="setActive(i)"
+        >
+          <div class="flex items-center gap-4 mb-6">
+            <p-avatar
+              [label]="t.initials"
+              styleClass="testimonial-avatar"
+              shape="square"
+            />
+            <div>
+              <p class="font-lexend font-semibold text-lp-text text-sm">{{ t.name }}</p>
+              <p class="font-space text-xs text-lp-muted tracking-wide">{{ t.role }}</p>
+            </div>
+          </div>
+
+          <div class="flex gap-1 mb-5">
+            @for (star of [1,2,3,4,5]; track star) {
+              <span class="text-lp-yellow text-sm">★</span>
+            }
+          </div>
+
+          <p class="font-lexend font-light text-lp-muted text-sm leading-relaxed flex-1 mb-8">
+            "{{ t.text }}"
+          </p>
+
+          <div class="pt-6 border-t border-white/5">
+            <p class="font-lexend font-black text-2xl text-lp-yellow">{{ t.metric }}</p>
+            <p class="font-space text-xs uppercase tracking-widest text-lp-muted mt-1">{{ t.metricLabel }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="flex gap-2 mt-8 justify-center lg:justify-start">
+      @for (t of testimonials; track t.name; let i = $index) {
+        <button
+          class="testimonial-dot transition-all duration-300"
+          [class.testimonial-dot--active]="activeIndex() === i"
+          (click)="setActive(i)"
+          [attr.aria-label]="'Testimonial ' + (i + 1)"
+        ></button>
+      }
+    </div>
+  </div>
+</section>

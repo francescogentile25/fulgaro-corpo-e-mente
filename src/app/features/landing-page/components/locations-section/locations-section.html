@@ -1,0 +1,99 @@
+<section id="dove-alleno" class="locations-section bg-lp-bg py-24 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <!-- Header -->
+    <div class="locations-header grid lg:grid-cols-12 gap-6 mb-16 lg:mb-20">
+      <div class="lg:col-span-5">
+        <p class="font-space text-xs uppercase tracking-[0.25em] text-lp-lime mb-6">Le sedi</p>
+        <h2 class="locations-headline font-lexend font-black text-lp-text leading-none">
+          DOVE<br><span class="text-lp-lime">MI ALLENO</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-8 flex items-end">
+        <p class="font-lexend font-light text-lp-muted text-lg leading-relaxed">
+          Cinque sedi a Roma e coaching online. Ogni location è scelta per
+          offrirti le condizioni migliori, ogni giorno della settimana.
+        </p>
+      </div>
+    </div>
+
+    <!-- Grid: 5 location cards + 1 info card = 6 cells, 3 cols -->
+    <div class="locations-grid">
+
+      @for (loc of locations; track loc.id) {
+        <div
+          class="location-card"
+          [class.location-card--active]="activeLocation() === loc.id"
+          (mouseenter)="activeLocation.set(loc.id)"
+          (mouseleave)="activeLocation.set(null)"
+          (click)="toggleLocation(loc.id)"
+        >
+          <!-- Image -->
+          <div class="location-img-wrap">
+            <img
+              [src]="loc.image"
+              [alt]="loc.name"
+              class="location-img"
+            />
+            <div class="location-img-overlay"></div>
+          </div>
+
+          <!-- Top accent bar (appears on hover) -->
+          <div class="location-accent-bar"></div>
+
+          <!-- Content -->
+          <div class="location-content">
+            <h3 class="font-lexend font-bold text-lp-text text-base lg:text-lg leading-tight mb-3">
+              {{ loc.name }}
+            </h3>
+
+            @if (loc.schedules.length > 0) {
+              <div class="schedule-list">
+                @for (schedule of loc.schedules; track schedule.time; let i = $index) {
+                  <div class="schedule-row" [class.schedule-row--odd]="i % 2 === 0">
+                    <span class="font-space text-[11px] text-lp-muted tracking-wider">{{ schedule.days }}</span>
+                    <span class="font-lexend font-semibold text-xs text-lp-yellow tracking-tight">{{ schedule.time }}</span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="font-lexend font-light text-lp-muted text-xs leading-relaxed mb-2">
+                Programmi personalizzati, video-analisi e supporto continuo. Ovunque tu sia.
+              </p>
+            }
+
+            @if (loc.personalNote) {
+              <div class="personal-note">
+                <span class="personal-note-dot"></span>
+                <span class="font-space text-[10px] text-lp-lime tracking-wide">
+                  @if (loc.isOnline) { Orari flessibili, su misura per te }
+                  @else { Orari individuali su richiesta }
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Info card (6th cell) -->
+      <div class="location-card location-card--info">
+        <div class="location-content location-content--info">
+          <p class="font-lexend font-black text-3xl lg:text-4xl text-lp-text leading-none mb-1">
+            5
+          </p>
+          <p class="font-lexend font-black text-lg text-lp-lime uppercase tracking-widest mb-4">
+            sedi a Roma
+          </p>
+          <p class="font-lexend font-light text-lp-muted text-sm leading-relaxed mb-6">
+            Più il coaching online per chi non è in città.
+            Ogni sede offre orari personalizzabili per lezioni individuali 1:1.
+          </p>
+          <button class="info-cta font-lexend font-semibold text-xs uppercase tracking-widest px-6 py-3 text-white">
+            Contattami
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

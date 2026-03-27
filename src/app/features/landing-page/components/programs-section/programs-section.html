@@ -1,0 +1,70 @@
+<section id="programmi" class="programs-section bg-lp-bg-low py-24 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <div class="programs-header grid lg:grid-cols-12 gap-6 mb-16 lg:mb-20">
+      <div class="lg:col-span-5">
+        <p class="font-space text-xs uppercase tracking-[0.25em] text-lp-lime mb-6">Scegli il tuo percorso</p>
+        <h2 class="programs-headline font-lexend font-black text-lp-text leading-none">
+          I NOSTRI<br><span class="text-lp-lime">PROGRAMMI</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-7 flex items-end">
+        <p class="font-lexend font-light text-lp-muted text-lg leading-relaxed">
+          Due percorsi, un unico obiettivo: farti evolvere. Scegli l'energia
+          del gruppo o la precisione del coaching privato.
+        </p>
+      </div>
+    </div>
+
+    <div class="programs-grid grid lg:grid-cols-2 gap-px">
+      @for (program of programs; track program.id) {
+        <div class="program-card relative overflow-hidden flex flex-col">
+          <div class="program-card-bg">
+            <div class="orb orb--1" [class.orb--right]="program.id === 'individuale'"></div>
+            <div class="orb orb--2" [class.orb--right]="program.id === 'individuale'"></div>
+            <div class="orb orb--3"></div>
+            <div class="noise-layer"></div>
+          </div>
+
+          <div class="relative z-10 p-8 lg:p-12 xl:p-14 flex flex-col flex-1">
+            <div class="flex items-center gap-4 mb-10">
+              <div class="icon-box w-12 h-12 flex items-center justify-center">
+                <i [class]="program.icon + ' text-lg text-lp-lime'"></i>
+              </div>
+              <div>
+                <p class="font-space text-xs uppercase tracking-widest text-lp-lime">{{ program.subtitle }}</p>
+              </div>
+            </div>
+
+            <h3 class="program-card-title font-lexend font-black text-lp-text leading-none mb-8 tracking-tight">
+              {{ program.title }}
+            </h3>
+
+            <p class="font-lexend font-light text-lp-muted text-base leading-relaxed mb-10">
+              {{ program.description }}
+            </p>
+
+            <ul class="space-y-3 mb-10">
+              @for (highlight of program.highlights; track highlight) {
+                <li class="flex items-start gap-3">
+                  <span class="mt-1.5 w-1.5 h-1.5 bg-lp-lime flex-shrink-0 block"></span>
+                  <span class="font-space text-xs text-lp-muted leading-relaxed tracking-wide">{{ highlight }}</span>
+                </li>
+              }
+            </ul>
+
+            <div class="ideal-for mt-auto p-5">
+              <p class="font-space text-xs uppercase tracking-widest text-lp-yellow mb-2">Ideale per</p>
+              <p class="font-lexend font-light text-lp-muted text-sm leading-relaxed">{{ program.idealFor }}</p>
+            </div>
+
+            <button class="program-cta mt-8 w-full font-lexend font-semibold text-sm uppercase tracking-widest px-8 py-4 text-white transition-transform duration-200 hover:scale-[1.02]">
+              Scopri di più
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</section>

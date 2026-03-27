@@ -1,0 +1,38 @@
+.cta-headline {
+  font-size: clamp(3rem, 8vw, 8rem);
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+
+  .cta-word {
+    display: block;
+    overflow: hidden;
+  }
+}
+
+.cta-glow {
+  background: radial-gradient(circle, rgba(255, 43, 64, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+.cta-bg-image {
+  background-image: url('https://images.unsplash.com/photo-1502904550040-7534597429ae?w=1920&q=80&fit=crop');
+  background-size: cover;
+  background-position: center right;
+  opacity: 0.04;
+  filter: saturate(0);
+}
+
+.cta-primary {
+  background: linear-gradient(135deg, #ff8a95 0%, #ff2b40 100%);
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.cta-secondary {
+  background: transparent;
+  border: 2px solid rgba(255, 138, 149, 0.25);
+  cursor: pointer;
+  display: inline-block;
+}

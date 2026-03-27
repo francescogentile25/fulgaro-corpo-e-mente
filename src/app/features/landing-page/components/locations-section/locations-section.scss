@@ -1,0 +1,178 @@
+// ── Headline ──
+.locations-headline {
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+// ── Grid layout ──
+// 5 location cards + 1 info card = 6 cells
+// Desktop: 3 cols × 2 rows | Tablet: 2 cols × 3 rows | Mobile: 1 col
+.locations-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background-color: rgba(255, 255, 255, 0.06);
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// ── Card base ──
+.location-card {
+  position: relative;
+  background: #131313;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+
+  // Top accent bar
+  .location-accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.35s ease;
+    z-index: 3;
+  }
+
+  &:hover,
+  &--active {
+    .location-accent-bar {
+      background: #ff2b40;
+    }
+
+    .location-img {
+      filter: grayscale(0) contrast(1.02) brightness(1.05);
+      transform: scale(1.04);
+    }
+
+    .location-img-overlay {
+      opacity: 0.65;
+    }
+  }
+
+  // Info card variant — no image, no hover color effect
+  &--info {
+    background: #1a1a1a;
+    cursor: default;
+
+    .location-accent-bar {
+      display: none;
+    }
+
+    &:hover {
+      .location-img { filter: none; transform: none; }
+    }
+  }
+}
+
+// ── Image wrapper ──
+.location-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+// ── Image: grayscale default, color on hover ──
+.location-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  // Start B&W
+  filter: grayscale(1) contrast(1.05) brightness(0.9);
+  transform: scale(1);
+  transition:
+    filter 0.55s ease,
+    transform 0.65s ease;
+  will-change: filter, transform;
+  display: block;
+}
+
+// Gradient overlay — dark at bottom for text legibility only
+.location-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(19, 19, 19, 0.85) 0%,
+    rgba(19, 19, 19, 0.3) 45%,
+    rgba(19, 19, 19, 0) 100%
+  );
+  opacity: 0.8;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+// ── Content area ──
+.location-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.5rem 1.5rem;
+
+  &--info {
+    justify-content: center;
+    padding: 2rem 2rem 2.25rem;
+  }
+}
+
+// ── Schedule rows ──
+.schedule-list {
+  margin-bottom: 0.75rem;
+}
+
+.schedule-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+
+  &--odd {
+    background: rgba(255, 255, 255, 0.055);
+  }
+}
+
+// ── Personal note ──
+.personal-note {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.personal-note-dot {
+  display: block;
+  flex-shrink: 0;
+  width: 4px;
+  height: 4px;
+  background: #ff8a95;
+}
+
+// ── Info CTA button ──
+.info-cta {
+  background: linear-gradient(135deg, #ff8a95 0%, #ff2b40 100%);
+  border: none;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+}

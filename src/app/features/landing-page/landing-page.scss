@@ -1,0 +1,21 @@
+.landing-page {
+  --lp-bg:        #0e0e0e;
+  --lp-bg-low:    #131313;
+  --lp-bg-mid:    #1a1a1a;
+  --lp-bg-high:   #20201f;
+  --lp-bg-bright: #2c2c2c;
+  --lp-lime:      #ff8a95;
+  --lp-lime-c:    #ff2b40;
+  --lp-yellow:    #ff2b40;
+  --lp-text:      #e8e8e8;
+  --lp-muted:     #adaaaa;
+
+  background-color: #0e0e0e;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  * {
+    font-family: 'Lexend', sans-serif;
+    box-sizing: border-box;
+  }
+}

@@ -1,0 +1,68 @@
+<header
+  class="nav-bar fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+  [class.scrolled]="isScrolled()"
+>
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 lg:h-20">
+    <a class="logo font-lexend font-black text-lp-lime text-xl lg:text-2xl tracking-widest uppercase cursor-pointer select-none">
+      FULGARO<span class="text-lp-text block text-[0.55em] tracking-[0.3em] font-medium -mt-0.5">Corpo e Mente</span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-10">
+      @for (link of navLinks; track link.anchor) {
+        <button
+          class="nav-link font-space text-xs uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200"
+          (click)="scrollTo(link.anchor)"
+        >
+          {{ link.label }}
+        </button>
+      }
+    </nav>
+
+    <div class="hidden lg:block">
+      <button
+        class="cta-btn font-lexend font-semibold text-xs uppercase tracking-widest px-6 py-3 bg-lp-lime text-white transition-transform duration-200 hover:scale-105"
+        (click)="scrollTo('#cta')"
+      >
+        Inizia Ora
+      </button>
+    </div>
+
+    <button
+      class="lg:hidden flex flex-col gap-1.5 p-2"
+      (click)="mobileMenuOpen.set(true)"
+      aria-label="Apri menu"
+    >
+      <span class="hamburger-line block w-6 h-0.5 bg-lp-lime transition-all duration-300"></span>
+      <span class="hamburger-line block w-4 h-0.5 bg-lp-lime transition-all duration-300"></span>
+      <span class="hamburger-line block w-6 h-0.5 bg-lp-lime transition-all duration-300"></span>
+    </button>
+  </div>
+</header>
+
+<p-drawer
+  [(visible)]="mobileMenuOpen"
+  position="right"
+  styleClass="mobile-drawer"
+>
+  <ng-template #header>
+    <span class="font-lexend font-black text-lp-lime text-xl tracking-widest uppercase">
+      FULGARO<span class="text-lp-text block text-[0.55em] tracking-[0.3em] font-medium -mt-0.5">Corpo e Mente</span>
+    </span>
+  </ng-template>
+  <nav class="flex flex-col gap-6 pt-8">
+    @for (link of navLinks; track link.anchor) {
+      <button
+        class="text-left font-space text-sm uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200 py-2 border-b border-white/5"
+        (click)="scrollTo(link.anchor)"
+      >
+        {{ link.label }}
+      </button>
+    }
+    <button
+      class="mt-4 font-lexend font-semibold text-xs uppercase tracking-widest px-6 py-4 bg-lp-lime text-white hover:scale-105 transition-transform duration-200"
+      (click)="scrollTo('#cta')"
+    >
+      Inizia Ora
+    </button>
+  </nav>
+</p-drawer>

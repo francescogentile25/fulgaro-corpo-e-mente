@@ -1,0 +1,63 @@
+<footer class="landing-footer bg-lp-bg border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 pt-20 pb-10">
+
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
+      <div class="lg:col-span-4">
+        <p class="font-lexend font-black text-lp-lime text-2xl tracking-widest uppercase mb-1">
+          FULGARO
+        </p>
+        <p class="font-lexend font-medium text-lp-text text-xs tracking-[0.3em] uppercase mb-5">
+          Corpo e Mente
+        </p>
+        <p class="font-lexend font-light text-lp-muted text-sm leading-relaxed max-w-xs mb-8">
+          Allenamenti di gruppo e coaching individuale a Roma.
+          Un metodo che unisce corpo e mente per risultati reali.
+        </p>
+        <div class="flex gap-4">
+          @for (social of socials; track social.label) {
+            <button
+              class="social-btn w-10 h-10 flex items-center justify-center bg-lp-bg-high text-lp-muted hover:text-lp-lime hover:bg-lp-bg-bright transition-all duration-200"
+              [attr.aria-label]="social.label"
+            >
+              <i [class]="social.icon + ' text-sm'"></i>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 lg:col-start-6 grid sm:grid-cols-3 gap-10">
+        @for (col of columns; track col.heading) {
+          <div>
+            <p class="font-space text-xs uppercase tracking-[0.2em] text-lp-lime mb-6">{{ col.heading }}</p>
+            <ul class="space-y-4">
+              @for (link of col.links; track link.label) {
+                <li>
+                  <button
+                    class="font-lexend text-sm text-lp-muted hover:text-lp-text transition-colors duration-200 text-left"
+                    (click)="scrollTo(link.anchor)"
+                  >
+                    {{ link.label }}
+                  </button>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="font-space text-xs text-lp-muted tracking-wider">
+        &copy; {{ currentYear }} Fulgaro Corpo e Mente. Tutti i diritti riservati.
+      </p>
+      <div class="flex gap-6">
+        <button class="font-space text-xs text-lp-muted hover:text-lp-text transition-colors duration-200">
+          Privacy Policy
+        </button>
+        <button class="font-space text-xs text-lp-muted hover:text-lp-text transition-colors duration-200">
+          Cookie Policy
+        </button>
+      </div>
+    </div>
+  </div>
+</footer>
