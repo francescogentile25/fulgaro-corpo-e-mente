@@ -1,29 +1,82 @@
 import { Routes } from "@angular/router";
 import { loginGuard } from "../../core/guards/login.guard";
+import { authGuard } from "../../core/guards/auth.guard";
+import { adminGuard } from "../../core/guards/admin.guard";
 
 export const layoutRoutes: Routes = [
+  // Landing page pubblica
   {
     path: '',
     loadComponent: () => import('../landing-page/landing-page').then(c => c.LandingPage)
   },
   {
     path: 'app',
-    loadComponent: () => import('./main/main').then(c => c.Main),
     children: [
+      // Pagine senza layout app (no sidebar/header)
       {
         path: 'login',
         canActivate: [loginGuard],
         loadComponent: () => import('./../auth/login/login').then(c => c.Login)
       },
       {
-        path: '__implementazione_tabella_semplice__',
-        loadComponent: () => import('./../../__esempi_di_uso__/__implementazione_tabella_semplice__/tabella-semplice/tabella-semplice')
-          .then(c => c.TabellaSemplice)
+        path: 'register',
+        canActivate: [loginGuard],
+        loadComponent: () => import('./../auth/register/register').then(c => c.Register)
       },
+      // Area protetta — con layout app (Main = sidebar + header)
       {
-        path: '__implementazione_tabella_con_paginazione__',
-        loadComponent: () => import('./../../__esempi_di_uso__/__implementazione_tabella_con_paginazione__/tabella-con-paginazione/tabella-con-paginazione')
-          .then(c => c.TabellaConPaginazione)
+        path: '',
+        loadComponent: () => import('./main/main').then(c => c.Main),
+        children: [
+          {
+            path: 'dashboard',
+            canActivate: [authGuard],
+            loadComponent: () => import('../dashboard/dashboard').then(c => c.Dashboard)
+          },
+          {
+            path: 'groups',
+            canActivate: [adminGuard],
+            loadComponent: () => import('../groups/group-list/group-list').then(c => c.GroupList)
+          },
+          {
+            path: 'athletes',
+            canActivate: [adminGuard],
+            loadComponent: () => import('../athletes/atleta-list/atleta-list').then(c => c.AtletaList)
+          },
+          {
+            path: 'schede',
+            canActivate: [adminGuard],
+            loadComponent: () => import('../schedule/schedule-container/schedule-container').then(c => c.ScheduleContainer),
+            children: [
+              {
+                path: ':atletaId',
+                loadComponent: () => import('../schedule/athlete-schedule/athlete-schedule').then(c => c.AthleteSchedule),
+              }
+            ]
+          },
+          {
+            // Rotta per l'atleta: vede solo la propria scheda
+            path: 'la-mia-scheda',
+            canActivate: [authGuard],
+            loadComponent: () => import('../schedule/athlete-schedule/athlete-schedule').then(c => c.AthleteSchedule),
+          },
+          {
+            path: 'notifications',
+            canActivate: [authGuard],
+            loadComponent: () => import('../notifications/notifications-page/notifications-page').then(c => c.NotificationsPage),
+          },
+          {
+            path: 'payments',
+            canActivate: [authGuard],
+            loadComponent: () => import('../payments/payments-page/payments-page').then(c => c.PaymentsPage),
+          },
+          // Redirect /app → /app/dashboard
+          {
+            path: '',
+            redirectTo: 'dashboard',
+            pathMatch: 'full'
+          }
+        ]
       }
     ]
   },

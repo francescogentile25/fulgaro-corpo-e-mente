@@ -1,0 +1,328 @@
+<div class="p-4 sm:p-6">
+
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Atleti</h1>
+      <p class="text-slate-500 text-sm mt-0.5">{{ atletaStore.count() }} atleti registrati</p>
+    </div>
+  </div>
+
+  <!-- Barra ricerca -->
+  <div class="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 mb-4 flex gap-3 items-center">
+    <div class="relative flex-1">
+      <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+      <input
+        pInputText
+        [(ngModel)]="searchText"
+        [ngModelOptions]="{standalone: true}"
+        placeholder="Cerca per nome, cognome o email…"
+        class="w-full pl-9"
+      />
+    </div>
+    <p-button
+      icon="pi pi-refresh"
+      severity="secondary"
+      variant="text"
+      pTooltip="Ricarica"
+      tooltipPosition="top"
+      (onClick)="atletaStore.getAll$()"
+    />
+  </div>
+
+  <!-- Nota -->
+  <div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-4 flex items-start gap-3">
+    <i class="pi pi-info-circle text-amber-500 mt-0.5 flex-shrink-0"></i>
+    <p class="text-sm text-amber-800">
+      Gli atleti si registrano dalla pagina di login. Approvali attivando il loro account e assegnagli un gruppo.
+    </p>
+  </div>
+
+  <!-- ── Lista mobile (card) ─────────────────────────── -->
+  <div class="flex flex-col gap-3 lg:hidden">
+    @if (atletaStore.loading()) {
+      @for (_ of [1,2,3]; track $index) {
+        <div class="bg-white rounded-xl border border-slate-200 p-4 animate-pulse">
+          <div class="h-4 bg-slate-200 rounded w-1/2 mb-2"></div>
+          <div class="h-3 bg-slate-100 rounded w-3/4"></div>
+        </div>
+      }
+    } @else if (filteredAtleti.length === 0) {
+      <div class="bg-white rounded-xl border border-slate-200 py-12 flex flex-col items-center text-slate-400">
+        <i class="pi pi-users text-4xl mb-3"></i>
+        <p class="font-medium">Nessun atleta trovato</p>
+        <p class="text-sm mt-1">
+          @if (searchText) { Nessun risultato per "{{ searchText }}" }
+          @else { Gli atleti appariranno qui dopo la registrazione. }
+        </p>
+      </div>
+    } @else {
+      @for (atleta of filteredAtleti; track atleta.id) {
+        <div class="bg-white rounded-xl border border-slate-200 p-4">
+          <div class="flex items-start justify-between gap-3">
+
+            <!-- Avatar + info -->
+            <div class="flex items-center gap-3 min-w-0">
+              <span
+                class="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+                [style.background]="atleta.attivo ? 'var(--p-primary-color, #6366f1)' : '#94a3b8'"
+              >
+                {{ atleta.nome.charAt(0) }}{{ atleta.cognome.charAt(0) }}
+              </span>
+              <div class="min-w-0">
+                <p class="font-semibold text-slate-800 leading-tight truncate">{{ atleta.nome }} {{ atleta.cognome }}</p>
+                <p class="text-xs text-slate-500 truncate mt-0.5">{{ atleta.email }}</p>
+                @if (atleta.group_id) {
+                  <span class="inline-flex items-center gap-1 bg-indigo-50 text-indigo-700 text-xs font-medium px-2 py-0.5 rounded-full mt-1">
+                    <i class="pi pi-sitemap text-xs"></i>
+                    {{ getGroupName(atleta.group_id) }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <!-- Stato badge -->
+            <p-tag
+              [value]="atleta.attivo ? 'Attivo' : 'Inattivo'"
+              [severity]="atleta.attivo ? 'success' : 'secondary'"
+              styleClass="text-xs cursor-pointer flex-shrink-0"
+              [pTooltip]="atleta.attivo ? 'Disattiva' : 'Attiva'"
+              tooltipPosition="top"
+              (click)="toggleAttivo(atleta)"
+            />
+          </div>
+
+          <!-- Azioni mobile -->
+          <div class="flex gap-2 mt-3 pt-3 border-t border-slate-100">
+            <a
+              [routerLink]="scheduleUrl(atleta.id)"
+              class="flex-1"
+            >
+              <p-button
+                label="Scheda"
+                icon="pi pi-calendar"
+                severity="secondary"
+                variant="outlined"
+                size="small"
+                styleClass="w-full"
+              />
+            </a>
+            <p-button
+              icon="pi pi-pencil"
+              severity="secondary"
+              variant="text"
+              size="small"
+              pTooltip="Modifica"
+              (onClick)="openEdit(atleta)"
+            />
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              variant="text"
+              size="small"
+              pTooltip="Elimina"
+              (onClick)="confirmDelete(atleta)"
+            />
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- ── Tabella desktop ─────────────────────────────── -->
+  <div class="hidden lg:block bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <p-table
+      [value]="filteredAtleti"
+      [loading]="atletaStore.loading()"
+      [paginator]="filteredAtleti.length > 15"
+      [rows]="15"
+      styleClass="p-datatable-sm"
+      dataKey="id"
+    >
+      <ng-template #header>
+        <tr>
+          <th>Atleta</th>
+          <th>Email</th>
+          <th>Gruppo</th>
+          <th class="w-28 text-center">Stato</th>
+          <th class="w-40 text-center">Azioni</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-atleta>
+        <tr>
+          <td>
+            <div class="flex items-center gap-2.5">
+              <span
+                class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                [style.background]="atleta.attivo ? 'var(--p-primary-color, #6366f1)' : '#94a3b8'"
+              >
+                {{ atleta.nome.charAt(0) }}{{ atleta.cognome.charAt(0) }}
+              </span>
+              <p class="font-medium text-slate-800">{{ atleta.nome }} {{ atleta.cognome }}</p>
+            </div>
+          </td>
+
+          <td class="text-slate-500 text-sm">{{ atleta.email }}</td>
+
+          <td>
+            @if (atleta.group_id) {
+              <span class="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 text-xs font-medium px-2.5 py-1 rounded-full">
+                <i class="pi pi-sitemap text-xs"></i>
+                {{ getGroupName(atleta.group_id) }}
+              </span>
+            } @else {
+              <span class="text-slate-400 text-sm">—</span>
+            }
+          </td>
+
+          <td class="text-center">
+            <p-tag
+              [value]="atleta.attivo ? 'Attivo' : 'Inattivo'"
+              [severity]="atleta.attivo ? 'success' : 'secondary'"
+              styleClass="text-xs cursor-pointer"
+              [pTooltip]="atleta.attivo ? 'Clicca per disattivare' : 'Clicca per attivare'"
+              tooltipPosition="top"
+              (click)="toggleAttivo(atleta)"
+            />
+          </td>
+
+          <td>
+            <div class="flex justify-center items-center gap-1">
+              <a [routerLink]="scheduleUrl(atleta.id)">
+                <p-button
+                  icon="pi pi-calendar"
+                  size="small"
+                  severity="secondary"
+                  variant="outlined"
+                  pTooltip="Vedi scheda"
+                  tooltipPosition="top"
+                />
+              </a>
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                variant="text"
+                size="small"
+                pTooltip="Modifica"
+                tooltipPosition="top"
+                (onClick)="openEdit(atleta)"
+              />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                variant="text"
+                size="small"
+                pTooltip="Elimina profilo"
+                tooltipPosition="top"
+                (onClick)="confirmDelete(atleta)"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #empty>
+        <tr>
+          <td colspan="5">
+            <div class="flex flex-col items-center justify-center py-12 text-slate-400">
+              <i class="pi pi-users text-4xl mb-3"></i>
+              <p class="font-medium">Nessun atleta trovato</p>
+              <p class="text-sm mt-1">
+                @if (searchText) { Nessun risultato per "{{ searchText }}". }
+                @else { Gli atleti appariranno qui dopo la registrazione. }
+              </p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>
+
+<!-- ── Dialog Modifica Atleta ──────────────────────────────── -->
+<p-dialog
+  [(visible)]="dialogVisible"
+  header="Modifica atleta"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: 'min(480px, 95vw)' }"
+  (onHide)="form.reset()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4 pt-2">
+
+    <div class="grid grid-cols-2 gap-3">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-sm font-medium text-slate-700">Nome *</label>
+        <input pInputText formControlName="nome" placeholder="Mario"
+          [invalid]="form.controls.nome.invalid && form.controls.nome.touched" />
+        @if (form.controls.nome.invalid && form.controls.nome.touched) {
+          <p-message severity="error" size="small" variant="simple">Obbligatorio</p-message>
+        }
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-sm font-medium text-slate-700">Cognome *</label>
+        <input pInputText formControlName="cognome" placeholder="Rossi"
+          [invalid]="form.controls.cognome.invalid && form.controls.cognome.touched" />
+        @if (form.controls.cognome.invalid && form.controls.cognome.touched) {
+          <p-message severity="error" size="small" variant="simple">Obbligatorio</p-message>
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-medium text-slate-700">Gruppo</label>
+      <p-select
+        formControlName="group_id"
+        [options]="groupOptions()"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Seleziona gruppo…"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="flex items-center justify-between bg-slate-50 rounded-lg px-4 py-3">
+      <div>
+        <p class="text-sm font-medium text-slate-700">Atleta attivo</p>
+        <p class="text-xs text-slate-500 mt-0.5">Un atleta inattivo non può accedere all'app</p>
+      </div>
+      <p-toggleswitch formControlName="attivo" />
+    </div>
+
+  </form>
+
+  <ng-template #footer>
+    <p-button label="Annulla" severity="secondary" variant="text" (onClick)="dialogVisible = false" />
+    <p-button label="Salva" icon="pi pi-check" [loading]="atletaStore.loading()" (onClick)="save()" />
+  </ng-template>
+</p-dialog>
+
+<!-- ── Dialog Conferma Eliminazione ───────────────────────── -->
+<p-dialog
+  [(visible)]="deleteVisible"
+  header="Conferma eliminazione"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: 'min(420px, 95vw)' }"
+>
+  <div class="flex items-start gap-4 py-2">
+    <span class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+      <i class="pi pi-exclamation-triangle text-red-500"></i>
+    </span>
+    <div>
+      <p class="text-slate-800 font-medium">
+        Eliminare il profilo di <strong>{{ atletaToDelete?.nome }} {{ atletaToDelete?.cognome }}</strong>?
+      </p>
+      <p class="text-sm text-slate-500 mt-1">
+        L'account Supabase Auth rimarrà attivo e dovrà essere rimosso separatamente.
+      </p>
+    </div>
+  </div>
+  <ng-template #footer>
+    <p-button label="Annulla" severity="secondary" variant="text" (onClick)="deleteVisible = false" />
+    <p-button label="Elimina profilo" severity="danger" icon="pi pi-trash"
+      [loading]="atletaStore.loading()" (onClick)="doDelete()" />
+  </ng-template>
+</p-dialog>

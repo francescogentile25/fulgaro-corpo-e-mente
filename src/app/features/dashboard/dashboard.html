@@ -1,0 +1,298 @@
+<div class="p-5 md:p-8 max-w-5xl mx-auto">
+
+  <!-- ═══ BENVENUTO ═══ -->
+  <div class="mb-7">
+    <h1 class="text-2xl font-bold text-slate-800">
+      Ciao, {{ authStore.userName() }}
+    </h1>
+    <p class="text-slate-500 mt-1 text-sm">
+      {{ authStore.isAdmin() ? 'Pannello amministratore' : 'Il tuo spazio allenamento' }}
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- LOADING SKELETON                               -->
+  <!-- ═══════════════════════════════════════════════ -->
+  @if (loading()) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="bg-white rounded-xl border border-slate-200 p-5 animate-pulse">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-slate-100"></div>
+            <div class="flex-1">
+              <div class="h-3 bg-slate-100 rounded w-24 mb-2"></div>
+              <div class="h-6 bg-slate-100 rounded w-16"></div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- VISTA ADMIN                                    -->
+  <!-- ═══════════════════════════════════════════════ -->
+  @if (authStore.isAdmin() && adminStats()) {
+    <!-- KPI cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+
+      <!-- Atleti attivi -->
+      <a [routerLink]="paths.athletesUrl"
+         class="bg-white rounded-xl border border-slate-200 p-5 flex items-center gap-4 hover:shadow-md transition-shadow group">
+        <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-100 transition-colors">
+          <i class="pi pi-users text-indigo-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Atleti attivi</p>
+          <p class="text-2xl font-bold text-slate-800">{{ adminStats()!.atletiAttivi }}</p>
+        </div>
+      </a>
+
+      <!-- Allenamenti settimana -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+          <i class="pi pi-bolt text-emerald-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Allenamenti questa settimana</p>
+          <p class="text-2xl font-bold text-slate-800">{{ adminStats()!.allenamentiSettimana }}</p>
+        </div>
+      </div>
+
+      <!-- % completamento -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+            <i class="pi pi-check-square text-amber-600 text-xl"></i>
+          </div>
+          <div>
+            <p class="text-sm text-slate-500">Completamento settimana</p>
+            <p class="text-2xl font-bold text-slate-800">
+              {{ adminStats()!.allenamentiSettimana > 0 ? adminStats()!.percCompletamentoSettimana + '%' : '—' }}
+            </p>
+          </div>
+        </div>
+        @if (adminStats()!.allenamentiSettimana > 0) {
+          <div class="w-full bg-slate-100 rounded-full h-1.5">
+            <div class="bg-amber-400 h-1.5 rounded-full transition-all"
+                 [style.width.%]="adminStats()!.percCompletamentoSettimana"></div>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            {{ adminStats()!.completatiSettimana }}/{{ adminStats()!.allenamentiSettimana }} completati
+          </p>
+        }
+      </div>
+
+      <!-- Pagamenti da confermare -->
+      <a [routerLink]="paths.paymentsUrl"
+         class="bg-white rounded-xl border border-slate-200 p-5 flex items-center gap-4 hover:shadow-md transition-shadow group"
+         [class.border-yellow-300]="paymentStore.comunicati() > 0"
+         [class.bg-yellow-50]="paymentStore.comunicati() > 0">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+             [class.bg-yellow-100]="paymentStore.comunicati() > 0"
+             [class.bg-rose-50]="paymentStore.comunicati() === 0">
+          <i class="text-xl"
+             [class.pi-clock]="paymentStore.comunicati() > 0"
+             [class.pi-credit-card]="paymentStore.comunicati() === 0"
+             [class.text-yellow-600]="paymentStore.comunicati() > 0"
+             [class.text-rose-600]="paymentStore.comunicati() === 0"
+             [class.pi]="true"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Pagamenti da confermare</p>
+          <p class="text-2xl font-bold"
+             [class.text-yellow-700]="paymentStore.comunicati() > 0"
+             [class.text-slate-800]="paymentStore.comunicati() === 0">
+            {{ paymentStore.comunicati() }}
+          </p>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Notifiche non lette -->
+    @if (notifStore.unreadCount() > 0) {
+      <a [routerLink]="paths.notificationsUrl"
+         class="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 mb-6 hover:bg-blue-100 transition-colors">
+        <i class="pi pi-bell text-blue-600"></i>
+        <span class="text-sm font-medium text-blue-700">
+          Hai <strong>{{ notifStore.unreadCount() }}</strong> notific{{ notifStore.unreadCount() === 1 ? 'a non letta' : 'he non lette' }}
+        </span>
+        <i class="pi pi-arrow-right text-blue-400 ml-auto text-sm"></i>
+      </a>
+    }
+
+    <!-- Link rapidi admin -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <a [routerLink]="paths.schedeUrl"
+         class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3.5 hover:shadow-sm hover:border-indigo-200 transition-all group">
+        <div class="w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-100 transition-colors">
+          <i class="pi pi-calendar text-indigo-600 text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-slate-700">Gestisci schede</span>
+        <i class="pi pi-arrow-right text-slate-300 ml-auto text-sm"></i>
+      </a>
+      <a [routerLink]="paths.athletesUrl"
+         class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3.5 hover:shadow-sm hover:border-indigo-200 transition-all group">
+        <div class="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center flex-shrink-0 group-hover:bg-violet-100 transition-colors">
+          <i class="pi pi-users text-violet-600 text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-slate-700">Gestisci atleti</span>
+        <i class="pi pi-arrow-right text-slate-300 ml-auto text-sm"></i>
+      </a>
+      <a [routerLink]="paths.paymentsUrl"
+         class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3.5 hover:shadow-sm hover:border-indigo-200 transition-all group">
+        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-100 transition-colors">
+          <i class="pi pi-credit-card text-emerald-600 text-sm"></i>
+        </div>
+        <span class="text-sm font-medium text-slate-700">Gestisci pagamenti</span>
+        <i class="pi pi-arrow-right text-slate-300 ml-auto text-sm"></i>
+      </a>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- VISTA ATLETA                                   -->
+  <!-- ═══════════════════════════════════════════════ -->
+  @if (authStore.isAtleta() && atletaStats()) {
+    <!-- KPI cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+
+      <!-- Km settimana -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+          <i class="pi pi-map text-blue-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Km questa settimana</p>
+          <p class="text-2xl font-bold text-slate-800">
+            {{ atletaStats()!.kmSettimana > 0 ? atletaStats()!.kmSettimana : '—' }}
+            @if (atletaStats()!.kmSettimana > 0) {
+              <span class="text-sm font-normal text-slate-400">km</span>
+            }
+          </p>
+        </div>
+      </div>
+
+      <!-- Km mese -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+          <i class="pi pi-map text-amber-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Km questo mese</p>
+          <p class="text-2xl font-bold text-slate-800">
+            {{ atletaStats()!.kmMese > 0 ? atletaStats()!.kmMese : '—' }}
+            @if (atletaStats()!.kmMese > 0) {
+              <span class="text-sm font-normal text-slate-400">km</span>
+            }
+          </p>
+        </div>
+      </div>
+
+      <!-- % completamento settimana -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+            <i class="pi pi-check-square text-emerald-600 text-xl"></i>
+          </div>
+          <div>
+            <p class="text-sm text-slate-500">Completamento settimana</p>
+            <p class="text-2xl font-bold text-slate-800">
+              {{ atletaStats()!.allenamentiSettimana > 0 ? atletaStats()!.percCompletamentoSettimana + '%' : '—' }}
+            </p>
+          </div>
+        </div>
+        @if (atletaStats()!.allenamentiSettimana > 0) {
+          <div class="w-full bg-slate-100 rounded-full h-1.5">
+            <div class="bg-emerald-500 h-1.5 rounded-full transition-all"
+                 [style.width.%]="atletaStats()!.percCompletamentoSettimana"></div>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            {{ atletaStats()!.completatiSettimana }}/{{ atletaStats()!.allenamentiSettimana }} completati
+          </p>
+        }
+      </div>
+
+      <!-- Pagamento mese corrente -->
+      <a [routerLink]="paths.paymentsUrl"
+         class="bg-white rounded-xl border border-slate-200 p-5 flex items-center gap-4 hover:shadow-md transition-shadow group">
+        <div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center flex-shrink-0 group-hover:bg-rose-100 transition-colors">
+          <i class="pi pi-credit-card text-rose-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Pagamento {{ currentMonthLabel }}</p>
+          <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold mt-1"
+                [class]="getPaymentBadge(currentPaymentStato).css">
+            {{ getPaymentBadge(currentPaymentStato).label }}
+          </span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Notifiche non lette -->
+    @if (notifStore.unreadCount() > 0) {
+      <a [routerLink]="paths.notificationsUrl"
+         class="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 mb-6 hover:bg-blue-100 transition-colors">
+        <i class="pi pi-bell text-blue-600"></i>
+        <span class="text-sm font-medium text-blue-700">
+          Hai <strong>{{ notifStore.unreadCount() }}</strong> notific{{ notifStore.unreadCount() === 1 ? 'a non letta' : 'he non lette' }}
+        </span>
+        <i class="pi pi-arrow-right text-blue-400 ml-auto text-sm"></i>
+      </a>
+    }
+
+    <!-- Prossimi allenamenti -->
+    @if (atletaStats()!.nextWorkouts.length > 0) {
+      <div class="bg-white rounded-xl border border-slate-200 p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-semibold text-slate-700">Prossimi allenamenti</h2>
+          <a [routerLink]="paths.miaSchedaUrl"
+             class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
+            Vedi tutti <i class="pi pi-arrow-right text-xs"></i>
+          </a>
+        </div>
+        <div class="flex flex-col gap-3">
+          @for (w of atletaStats()!.nextWorkouts; track w.id) {
+            <a [routerLink]="paths.miaSchedaUrl"
+               class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:border-indigo-200 border border-transparent transition-all group">
+              <!-- Icona tipo esercizio -->
+              <div class="w-9 h-9 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-200 transition-colors">
+                @switch (w.exercise?.tipo) {
+                  @case ('continua')      { <i class="pi pi-play-circle text-indigo-600 text-sm"></i> }
+                  @case ('intervallato')  { <i class="pi pi-sync text-indigo-600 text-sm"></i> }
+                  @case ('gara')          { <i class="pi pi-flag text-indigo-600 text-sm"></i> }
+                  @case ('potenziamento') { <i class="pi pi-bolt text-indigo-600 text-sm"></i> }
+                  @case ('riposo')        { <i class="pi pi-moon text-indigo-600 text-sm"></i> }
+                  @default                { <i class="pi pi-calendar text-indigo-600 text-sm"></i> }
+                }
+              </div>
+              <!-- Info -->
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-slate-700 truncate">
+                  {{ getTipoLabel(w.exercise?.tipo ?? '') }}
+                  @if (getWorkoutKm(w)) {
+                    <span class="font-normal text-slate-500"> · {{ getWorkoutKm(w) }}</span>
+                  }
+                </p>
+                <p class="text-xs text-slate-400">
+                  {{ w.data_workout | date: 'EEEE d MMMM' }}
+                </p>
+              </div>
+              <i class="pi pi-arrow-right text-slate-300 text-sm flex-shrink-0"></i>
+            </a>
+          }
+        </div>
+      </div>
+    } @else if (!loading()) {
+      <!-- Nessun allenamento futuro -->
+      <div class="bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-400">
+        <i class="pi pi-calendar text-3xl mb-3 block"></i>
+        <p class="font-medium text-slate-500">Nessun allenamento programmato</p>
+        <p class="text-sm mt-1">Chiedi al tuo coach di assegnarti un allenamento.</p>
+      </div>
+    }
+  }
+
+</div>

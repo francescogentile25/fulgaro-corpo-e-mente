@@ -1,0 +1,131 @@
+:host {
+  display: block;
+}
+
+// ── Layout principale ────────────────────────────────────────────────
+
+.schedule-layout {
+  display: flex;
+  height: calc(100dvh - 56px); // 56px = altezza header
+  overflow: hidden;
+}
+
+// ── Pannello sinistro (lista atleti) ─────────────────────────────────
+
+.schedule-aside {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  @media (min-width: 1024px) {
+    width: 300px;
+  }
+
+  @media (min-width: 1280px) {
+    width: 340px;
+  }
+
+  // Su mobile: nascondi il pannello quando un atleta è selezionato
+  &--hidden {
+    display: none;
+
+    @media (min-width: 1024px) {
+      display: flex;
+    }
+  }
+}
+
+.aside-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.aside-list {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.aside-footer {
+  padding: 0.5rem 1rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+// ── Voci lista atleti ─────────────────────────────────────────────────
+
+.atleta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s, border-left-color 0.15s;
+  background: #ffffff;
+  text-align: left;
+
+  &:hover {
+    background-color: #f8fafc;
+  }
+
+  &--selected {
+    background-color: #eff6ff;
+    border-left-color: #3b82f6;
+
+    &:hover {
+      background-color: #dbeafe;
+    }
+  }
+}
+
+.group-badge {
+  display: inline-block;
+  margin-top: 0.125rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border-radius: 9999px;
+}
+
+.inactive-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  background: #fef2f2;
+  color: #ef4444;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+// ── Area schedule (pannello destro) ───────────────────────────────────
+
+.schedule-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: #f8fafc;
+  min-width: 0;
+
+  // Su mobile: nascondi l'area quando nessun atleta è selezionato
+  &--empty {
+    display: none;
+
+    @media (min-width: 1024px) {
+      display: flex;
+    }
+  }
+}

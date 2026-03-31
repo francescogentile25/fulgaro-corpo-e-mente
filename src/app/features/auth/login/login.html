@@ -1,1 +1,72 @@
-<p>login works!</p>
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+
+    <!-- Logo / Titolo -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Fulgaro</h1>
+      <p class="text-gray-500 mt-1">Corpo & Mente — Running Coach</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-lg p-8">
+      <h2 class="text-xl font-semibold text-gray-700 mb-6">Accedi al tuo account</h2>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+
+        <!-- Email -->
+        <div class="flex flex-col gap-1">
+          <label for="email" class="text-sm font-medium text-gray-600">Email</label>
+          <input
+            pInputText
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="nome@email.com"
+            class="w-full"
+            [invalid]="form.controls.email.invalid && form.controls.email.touched"
+          />
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <p-message severity="error" size="small" variant="simple">
+              @if (form.controls.email.errors?.['required']) { Email obbligatoria }
+              @if (form.controls.email.errors?.['email']) { Formato email non valido }
+            </p-message>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="flex flex-col gap-1">
+          <label for="password" class="text-sm font-medium text-gray-600">Password</label>
+          <p-password
+            id="password"
+            formControlName="password"
+            placeholder="••••••••"
+            [feedback]="false"
+            [toggleMask]="true"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+            [invalid]="form.controls.password.invalid && form.controls.password.touched"
+          />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <p-message severity="error" size="small" variant="simple">Password obbligatoria</p-message>
+          }
+        </div>
+
+        <!-- Submit -->
+        <p-button
+          type="submit"
+          label="Accedi"
+          [loading]="authStore.loading()"
+          [disabled]="authStore.loading()"
+          styleClass="w-full mt-2"
+        />
+
+      </form>
+    </div>
+
+    <p class="text-center text-sm text-gray-500 mt-6">
+      Non hai un account?
+      <a [routerLink]="registerUrl" class="text-indigo-600 font-medium hover:text-indigo-800">Registrati</a>
+    </p>
+
+  </div>
+</div>

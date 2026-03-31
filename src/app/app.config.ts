@@ -1,25 +1,27 @@
 import {
   ApplicationConfig,
   importProvidersFrom,
+  LOCALE_ID,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection
 } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 
+registerLocaleData(localeIt);
+
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { provideHttpClient } from "@angular/common/http";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { providePrimeNG } from "primeng/config";
 import { GemelliLight } from "../assets/themes/gemelli-light";
 import { MessageService } from "primeng/api";
 import { ToastModule } from "primeng/toast";
-import { authInterceptor } from "./core/interceptors/auth.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(
-      withInterceptors([authInterceptor])
-    ),
+    provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
@@ -47,6 +49,7 @@ export const appConfig: ApplicationConfig = {
       },
       overlayAppendTo: 'body'
     }),
+    { provide: LOCALE_ID, useValue: 'it' },
     MessageService,
     importProvidersFrom(ToastModule),
   ]

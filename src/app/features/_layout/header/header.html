@@ -1,1 +1,56 @@
-<p>header works!</p>
+<header class="app-header">
+
+  <!-- Hamburger — visibile solo su mobile/tablet -->
+  <button
+    pButton
+    severity="secondary"
+    variant="text"
+    icon="pi pi-bars"
+    size="small"
+    class="hamburger-btn"
+    aria-label="Apri menu"
+    (click)="layoutService.toggleSidebar()"
+  ></button>
+
+  <div class="header-left">
+    <!-- Spazio per breadcrumb futuro -->
+  </div>
+
+  <div class="header-right">
+
+    <!-- Campanellina notifiche con badge -->
+    <p-overlay-badge
+      [value]="notificationStore.unreadCount() > 0 ? notificationStore.unreadCount().toString() : ''"
+      severity="danger"
+      styleClass="notif-badge-wrapper"
+    >
+      <button
+        pButton
+        severity="secondary"
+        variant="text"
+        icon="pi pi-bell"
+        size="small"
+        class="header-btn"
+        aria-label="Notifiche"
+        (click)="openNotifications()"
+      ></button>
+    </p-overlay-badge>
+
+    <span class="header-separator"></span>
+
+    <!-- Info utente -->
+    <div class="header-user">
+      <div class="user-meta">
+        <span class="user-name">{{ authStore.userName() }}</span>
+        <span class="user-role">{{ authStore.isAdmin() ? 'Amministratore' : 'Atleta' }}</span>
+      </div>
+    </div>
+  </div>
+
+</header>
+
+<!-- Drawer notifiche -->
+<app-notification-drawer
+  [visible]="drawerVisible()"
+  (visibleChange)="drawerVisible.set($event)"
+/>

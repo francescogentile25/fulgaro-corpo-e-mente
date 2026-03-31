@@ -1,0 +1,90 @@
+<div class="page-container">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-title">
+      <i class="pi pi-bell"></i>
+      <h1>Notifiche</h1>
+      @if (notificationStore.unreadCount() > 0) {
+        <span class="unread-badge">{{ notificationStore.unreadCount() }} nuove</span>
+      }
+    </div>
+    @if (notificationStore.unreadCount() > 0) {
+      <button
+        pButton
+        variant="outlined"
+        severity="secondary"
+        icon="pi pi-check-square"
+        label="Segna tutte come lette"
+        size="small"
+        (click)="markAllAsRead()"
+      ></button>
+    }
+  </div>
+
+  <p-divider />
+
+  <!-- Loading state -->
+  @if (notificationStore.loading()) {
+    <div class="empty-state">
+      <i class="pi pi-spin pi-spinner"></i>
+      <p>Caricamento notifiche...</p>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @else if (notificationStore.entities().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <i class="pi pi-bell-slash"></i>
+      </div>
+      <p class="empty-title">Nessuna notifica</p>
+      <p class="empty-sub">Sei in pari con tutto!</p>
+    </div>
+  }
+
+  <!-- Lista notifiche -->
+  @else {
+    <div class="notification-list">
+      @for (n of notificationStore.entities(); track n.id) {
+        <div
+          class="notification-card"
+          [class.notification-card--unread]="!n.letta"
+          (click)="markAsRead(n)"
+        >
+          <!-- Icona tipo -->
+          <div
+            class="notif-icon"
+            [style.color]="getIconColor(n.tipo)"
+            [style.background]="getIconColor(n.tipo) + '1a'"
+          >
+            <i [class]="getIcon(n.tipo)"></i>
+          </div>
+
+          <!-- Corpo -->
+          <div class="notif-body">
+            <div class="notif-meta">
+              <span class="tipo-label" [style.color]="getIconColor(n.tipo)">{{ getTipoLabel(n.tipo) }}</span>
+              <span class="notif-date">{{ n.created_at | date: 'dd MMM yyyy, HH:mm' : '' : 'it' }}</span>
+            </div>
+            <p class="notif-titolo">{{ n.titolo }}</p>
+            <p class="notif-messaggio">{{ n.messaggio }}</p>
+          </div>
+
+          <!-- Indicatore non letta -->
+          @if (!n.letta) {
+            <div class="unread-indicator">
+              <span class="unread-dot"></span>
+              <span class="unread-label">Nuova</span>
+            </div>
+          } @else {
+            <div class="read-indicator">
+              <i class="pi pi-check" title="Letta"></i>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+</div>

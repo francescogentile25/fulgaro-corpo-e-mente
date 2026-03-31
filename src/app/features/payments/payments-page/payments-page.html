@@ -1,0 +1,235 @@
+<div class="page-container">
+
+  <!-- ═══════════════ PAGE HEADER ═══════════════ -->
+  <div class="page-header">
+    <div class="page-title">
+      <i class="pi pi-credit-card"></i>
+      <h1>Pagamenti</h1>
+    </div>
+
+    <!-- Navigazione mesi (solo admin) -->
+    @if (authStore.isAdmin()) {
+      <div class="month-nav">
+        <button pButton variant="text" severity="secondary" icon="pi pi-chevron-left"
+          size="small" (click)="prevMonth()" aria-label="Mese precedente"></button>
+        <span class="month-label">{{ currentMonthLabel }}</span>
+        <button pButton variant="text" severity="secondary" icon="pi pi-chevron-right"
+          size="small" (click)="nextMonth()" aria-label="Mese successivo"></button>
+      </div>
+    }
+  </div>
+
+  <!-- ═══════════════ VISTA ADMIN ═══════════════ -->
+  @if (authStore.isAdmin()) {
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-chip stat-chip--comunicato">
+        <i class="pi pi-clock"></i>
+        <span>Da confermare: <strong>{{ paymentStore.comunicati() }}</strong></span>
+      </div>
+      <div class="stat-chip stat-chip--confermato">
+        <i class="pi pi-check"></i>
+        <span>Confermati: <strong>{{ paymentStore.confermati() }}</strong></span>
+      </div>
+      <div class="stat-chip stat-chip--non-pagato">
+        <i class="pi pi-times"></i>
+        <span>Non pagati: <strong>{{ paymentStore.nonPagati() }}</strong></span>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    @if (paymentStore.loading()) {
+      <div class="empty-state">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Caricamento...</span>
+      </div>
+    }
+
+    <!-- Lista atleti con stato pagamento -->
+    @else if (paymentStore.entities().length === 0) {
+      <div class="empty-state">
+        <i class="pi pi-users"></i>
+        <span>Nessun atleta attivo trovato</span>
+      </div>
+    }
+
+    @else {
+      <div class="payment-list">
+        @for (p of paymentStore.entities(); track p.id) {
+          <div class="payment-card" [class]="getStatoClass(p.stato)">
+
+            <!-- Avatar + nome -->
+            <div class="atleta-info">
+              <div class="atleta-avatar">
+                {{ (p.atleta?.nome?.charAt(0) ?? '?').toUpperCase() }}{{ (p.atleta?.cognome?.charAt(0) ?? '').toUpperCase() }}
+              </div>
+              <div class="atleta-details">
+                <p class="atleta-nome">{{ p.atleta?.cognome }} {{ p.atleta?.nome }}</p>
+                @if (p.comunicato_at) {
+                  <p class="atleta-meta">
+                    <i class="pi pi-send"></i>
+                    Comunicato il {{ p.comunicato_at | date: 'dd/MM/yyyy HH:mm' : '' : 'it' }}
+                  </p>
+                }
+                @if (p.confermato_at) {
+                  <p class="atleta-meta">
+                    <i class="pi pi-check-circle"></i>
+                    Confermato il {{ p.confermato_at | date: 'dd/MM/yyyy HH:mm' : '' : 'it' }}
+                  </p>
+                }
+                @if (p.note) {
+                  <p class="atleta-note">
+                    <i class="pi pi-comment"></i> {{ p.note }}
+                  </p>
+                }
+              </div>
+            </div>
+
+            <!-- Stato + azione -->
+            <div class="payment-actions">
+              <span class="stato-badge" [class]="getStatoClass(p.stato)">
+                {{ getStatoLabel(p.stato) }}
+              </span>
+              @if (p.stato === 'comunicato') {
+                <button
+                  pButton
+                  size="small"
+                  icon="pi pi-check"
+                  label="Conferma"
+                  (click)="confirmPayment(p, $event)"
+                ></button>
+              }
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+  }
+
+  <!-- ═══════════════ VISTA ATLETA ═══════════════ -->
+  @if (authStore.isAtleta()) {
+
+    <!-- Card mese corrente -->
+    <div class="current-month-card" [class]="getStatoClass(currentMonthPayment?.stato ?? 'non_pagato')">
+      <div class="current-month-header">
+        <div>
+          <p class="current-month-label">Mese corrente</p>
+          <h2 class="current-month-title">{{ getMeseLabel(todayMese) }} {{ todayAnno }}</h2>
+        </div>
+        <div class="current-stato-badge" [class]="getStatoClass(currentMonthPayment?.stato ?? 'non_pagato')">
+          @switch (currentMonthPayment?.stato ?? 'non_pagato') {
+            @case ('non_pagato') { <i class="pi pi-times-circle"></i> }
+            @case ('comunicato') { <i class="pi pi-clock"></i> }
+            @case ('confermato') { <i class="pi pi-check-circle"></i> }
+          }
+          <span>{{ getStatoLabel(currentMonthPayment?.stato ?? 'non_pagato') }}</span>
+        </div>
+      </div>
+
+      @if (currentMonthPayment?.comunicato_at) {
+        <p class="current-month-info">
+          <i class="pi pi-send"></i>
+          Comunicato il {{ currentMonthPayment!.comunicato_at | date: 'dd/MM/yyyy' : '' : 'it' }}
+        </p>
+      }
+      @if (currentMonthPayment?.confermato_at) {
+        <p class="current-month-info">
+          <i class="pi pi-check-circle"></i>
+          Confermato il {{ currentMonthPayment!.confermato_at | date: 'dd/MM/yyyy' : '' : 'it' }}
+        </p>
+      }
+      @if (currentMonthPayment?.note) {
+        <p class="current-month-note">
+          <i class="pi pi-comment"></i> {{ currentMonthPayment!.note }}
+        </p>
+      }
+
+      <!-- Bottone azione -->
+      @if (!currentMonthPayment || currentMonthPayment.stato === 'non_pagato') {
+        <button
+          pButton
+          size="large"
+          icon="pi pi-send"
+          label="Comunica pagamento"
+          class="comunica-btn"
+          (click)="openComunicaDialog()"
+        ></button>
+      }
+    </div>
+
+    <!-- Storico pagamenti -->
+    @if (paymentHistory.length > 0) {
+      <div class="history-section">
+        <h3 class="history-title">Storico</h3>
+        <div class="history-list">
+          @for (p of paymentHistory; track p.id) {
+            <div class="history-item">
+              <div class="history-left">
+                <span class="history-month">{{ getMeseLabel(p.mese) }} {{ p.anno }}</span>
+                @if (p.comunicato_at) {
+                  <span class="history-date">
+                    {{ p.comunicato_at | date: 'dd/MM/yyyy' : '' : 'it' }}
+                  </span>
+                }
+              </div>
+              <span class="stato-badge" [class]="getStatoClass(p.stato)">
+                {{ getStatoLabel(p.stato) }}
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+  }
+
+</div>
+
+<!-- ═══════════════ DIALOG: COMUNICA PAGAMENTO ═══════════════ -->
+<p-dialog
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: 'min(480px, 95vw)' }"
+  header="Comunica pagamento — {{ getMeseLabel(todayMese) }} {{ todayAnno }}"
+>
+  <div class="dialog-body">
+    <p class="dialog-info">
+      <i class="pi pi-info-circle"></i>
+      Comunica all'amministratore che hai effettuato il pagamento del mese corrente.
+    </p>
+
+    <div class="dialog-field">
+      <label for="pagamento-note" class="field-label">Note <span class="field-optional">(opzionale)</span></label>
+      <textarea
+        id="pagamento-note"
+        pTextarea
+        rows="3"
+        [(ngModel)]="dialogNote"
+        placeholder="Es. Pagato con bonifico, ref. 12345"
+        class="w-full"
+      ></textarea>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <button
+      pButton
+      variant="text"
+      severity="secondary"
+      label="Annulla"
+      (click)="dialogVisible.set(false)"
+    ></button>
+    <button
+      pButton
+      icon="pi pi-send"
+      label="Conferma comunicazione"
+      [loading]="paymentStore.loading()"
+      (click)="submitComunicaPagamento()"
+    ></button>
+  </ng-template>
+</p-dialog>

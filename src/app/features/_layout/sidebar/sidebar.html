@@ -1,1 +1,71 @@
-<p>sidebar works!</p>
+<aside class="sidebar" [class.sidebar--open]="layoutService.sidebarOpen()">
+
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <i class="pi pi-bolt"></i>
+    </div>
+    <div class="logo-text">
+      <p class="logo-title">Fulgaro</p>
+      <p class="logo-subtitle">Corpo & Mente</p>
+    </div>
+  </div>
+
+  <p-divider />
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    @for (item of visibleItems; track item.route) {
+      @if (item.comingSoon) {
+        <span
+          class="nav-item nav-item--disabled"
+          [pTooltip]="'Prossimamente'"
+          tooltipPosition="right"
+        >
+          <i class="pi {{ item.icon }}"></i>
+          <span>{{ item.label }}</span>
+          <span class="nav-badge">Soon</span>
+        </span>
+      } @else {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="nav-item--active"
+          class="nav-item"
+          (click)="closeOnMobile()"
+        >
+          <i class="pi {{ item.icon }}"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    }
+  </nav>
+
+  <!-- Footer: utente + logout -->
+  <div class="sidebar-footer">
+    <p-divider />
+
+    <div class="user-info">
+      <p-avatar
+        [label]="userInitial"
+        shape="circle"
+        styleClass="user-avatar"
+      />
+      <div class="user-details">
+        <p class="user-name">{{ authStore.userName() }}</p>
+        <p class="user-role">{{ authStore.isAdmin() ? 'Amministratore' : 'Atleta' }}</p>
+      </div>
+    </div>
+
+    <button
+      pButton
+      severity="secondary"
+      variant="text"
+      icon="pi pi-sign-out"
+      label="Esci"
+      size="small"
+      class="logout-btn"
+      (click)="logout()"
+    ></button>
+  </div>
+
+</aside>

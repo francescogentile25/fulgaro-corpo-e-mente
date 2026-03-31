@@ -18,7 +18,13 @@
       }
     </nav>
 
-    <div class="hidden lg:block">
+    <div class="hidden lg:flex items-center gap-3">
+      <a
+        [routerLink]="loginUrl"
+        class="font-lexend font-semibold text-xs uppercase tracking-widest px-5 py-3 border border-lp-lime/40 text-lp-lime hover:bg-lp-lime/10 transition-colors duration-200"
+      >
+        Accedi
+      </a>
       <button
         class="cta-btn font-lexend font-semibold text-xs uppercase tracking-widest px-6 py-3 bg-lp-lime text-white transition-transform duration-200 hover:scale-105"
         (click)="scrollTo('#cta')"
@@ -64,5 +70,12 @@
     >
       Inizia Ora
     </button>
+    <a
+      [routerLink]="loginUrl"
+      class="font-lexend font-semibold text-xs uppercase tracking-widest px-6 py-4 border border-lp-lime/40 text-lp-lime text-center hover:bg-lp-lime/10 transition-colors duration-200"
+      (click)="mobileMenuOpen.set(false)"
+    >
+      Accedi
+    </a>
   </nav>
 </p-drawer>

@@ -1,26 +1,54 @@
-import { inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { UserResponse } from "../models/responses/user.response";
-import { environment } from "../../../../environments/environment";
-import { LoginRequest } from "../models/requests/login.request";
-import { LoginResponse } from "../models/responses/login.response";
+import { inject, Injectable } from '@angular/core';
+import { Observable, from, map } from 'rxjs';
+import { SupabaseService } from '../../../core/services/supabase.service';
+import { ProfileModel } from '../models/responses/profile.model';
+import { LoginRequest } from '../models/requests/login.request';
+import { RegisterRequest } from '../models/requests/register.request';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  http = inject(HttpClient);
 
-  me(): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${ environment.urlApi }/me`, { withCredentials: true });
+  private supabase = inject(SupabaseService);
+
+  // Registrazione atleta: crea utente Auth + il trigger crea automaticamente il profilo
+  register(request: RegisterRequest) {
+    return this.supabase.client.auth.signUp({
+      email:    request.email,
+      password: request.password,
+      options:  { data: { nome: request.nome, cognome: request.cognome } }
+    });
   }
 
-  login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${ environment.urlApi }/login`, request, { withCredentials: true });
+  // Login con email e password tramite Supabase Auth
+  login(request: LoginRequest) {
+    return this.supabase.signIn(request.email, request.password);
   }
 
-  logout(): Observable<void> {
-    return this.http.post<void>(`${ environment.urlApi }/logout`, { }, { withCredentials: true });
+  // Logout tramite Supabase Auth
+  logout() {
+    return this.supabase.signOut();
+  }
+
+  // Recupera la sessione corrente (usato all'avvio app)
+  getSession() {
+    return this.supabase.getSession();
+  }
+
+  // Carica il profilo utente dalla tabella profiles
+  getProfile(userId: string): Observable<ProfileModel> {
+    return from(
+      this.supabase.client
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+    ).pipe(
+      map(({ data, error }: { data: any; error: any }) => {
+        if (error) throw error;
+        return data as ProfileModel;
+      })
+    );
   }
 }

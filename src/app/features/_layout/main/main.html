@@ -1,6 +1,21 @@
-<app-sidebar></app-sidebar>
+<div class="app-layout">
 
-<app-header></app-header>
-<router-outlet></router-outlet>
-<app-footer></app-footer>
-<p>main works!</p>
+  <app-sidebar />
+
+  <!-- Overlay mobile: chiude la sidebar al tap fuori -->
+  @if (layoutService.sidebarOpen()) {
+    <div
+      class="mobile-overlay"
+      (click)="layoutService.closeSidebar()"
+      aria-hidden="true"
+    ></div>
+  }
+
+  <div class="app-content">
+    <app-header />
+    <main class="app-main">
+      <router-outlet />
+    </main>
+  </div>
+
+</div>

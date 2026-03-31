@@ -1,0 +1,89 @@
+:host {
+  display: block;
+  flex-shrink: 0;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 56px;
+  padding: 0 1rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+// Hamburger: visibile solo sotto i 1024px
+.hamburger-btn {
+  display: flex !important;
+  flex-shrink: 0;
+
+  @media (min-width: 1024px) {
+    display: none !important;
+  }
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.header-btn {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+:host ::ng-deep .notif-badge-wrapper {
+  .p-badge {
+    font-size: 0.6rem !important;
+    min-width: 1rem !important;
+    height: 1rem !important;
+    line-height: 1rem !important;
+  }
+}
+
+.header-separator {
+  width: 1px;
+  height: 24px;
+  background: #e2e8f0;
+  margin: 0 0.25rem;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+
+  .user-meta {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+  }
+
+  .user-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .user-role {
+    font-size: 0.6875rem;
+    color: #94a3b8;
+    line-height: 1.2;
+
+    // Nascondi il ruolo su schermi piccoli per risparmiare spazio
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+}

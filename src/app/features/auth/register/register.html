@@ -1,0 +1,147 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+  <div class="w-full max-w-md">
+
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Fulgaro</h1>
+      <p class="text-gray-500 mt-1">Corpo & Mente — Running Coach</p>
+    </div>
+
+    <!-- Stato: email inviata -->
+    @if (emailSent()) {
+      <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
+        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="pi pi-envelope text-emerald-500 text-3xl"></i>
+        </div>
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Controlla la tua email</h2>
+        <p class="text-gray-500 text-sm mb-6">
+          Ti abbiamo inviato un link di conferma a <strong>{{ form.controls.email.value }}</strong>.
+          Clicca il link per attivare l'account, poi accedi.
+        </p>
+        <a
+          [routerLink]="loginUrl"
+          class="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-800"
+        >
+          <i class="pi pi-arrow-left text-xs"></i> Vai al login
+        </a>
+      </div>
+    }
+
+    <!-- Form registrazione -->
+    @if (!emailSent()) {
+      <div class="bg-white rounded-2xl shadow-lg p-8">
+        <h2 class="text-xl font-semibold text-gray-700 mb-6">Crea il tuo account</h2>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+          <!-- Nome + Cognome -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm font-medium text-gray-600">Nome *</label>
+              <input
+                pInputText
+                formControlName="nome"
+                placeholder="Mario"
+                class="w-full"
+                [invalid]="form.controls.nome.invalid && form.controls.nome.touched"
+              />
+              @if (form.controls.nome.invalid && form.controls.nome.touched) {
+                <p-message severity="error" size="small" variant="simple">Obbligatorio</p-message>
+              }
+            </div>
+            <div class="flex flex-col gap-1">
+              <label class="text-sm font-medium text-gray-600">Cognome *</label>
+              <input
+                pInputText
+                formControlName="cognome"
+                placeholder="Rossi"
+                class="w-full"
+                [invalid]="form.controls.cognome.invalid && form.controls.cognome.touched"
+              />
+              @if (form.controls.cognome.invalid && form.controls.cognome.touched) {
+                <p-message severity="error" size="small" variant="simple">Obbligatorio</p-message>
+              }
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-600">Email *</label>
+            <input
+              pInputText
+              type="email"
+              formControlName="email"
+              placeholder="mario.rossi@email.com"
+              class="w-full"
+              [invalid]="form.controls.email.invalid && form.controls.email.touched"
+            />
+            @if (form.controls.email.invalid && form.controls.email.touched) {
+              <p-message severity="error" size="small" variant="simple">
+                @if (form.controls.email.errors?.['required']) { Email obbligatoria }
+                @if (form.controls.email.errors?.['email']) { Formato non valido }
+              </p-message>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-600">Password *</label>
+            <p-password
+              formControlName="password"
+              placeholder="Min. 6 caratteri"
+              [feedback]="true"
+              [toggleMask]="true"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+              [invalid]="form.controls.password.invalid && form.controls.password.touched"
+            />
+            @if (form.controls.password.invalid && form.controls.password.touched) {
+              <p-message severity="error" size="small" variant="simple">
+                @if (form.controls.password.errors?.['required']) { Password obbligatoria }
+                @if (form.controls.password.errors?.['minlength']) { Minimo 6 caratteri }
+              </p-message>
+            }
+          </div>
+
+          <!-- Conferma password -->
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-600">Conferma password *</label>
+            <p-password
+              formControlName="confirmPassword"
+              placeholder="Ripeti la password"
+              [feedback]="false"
+              [toggleMask]="true"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+              [invalid]="(form.controls.confirmPassword.invalid || form.hasError('passwordMismatch')) && form.controls.confirmPassword.touched"
+            />
+            @if (form.hasError('passwordMismatch') && form.controls.confirmPassword.touched) {
+              <p-message severity="error" size="small" variant="simple">Le password non coincidono</p-message>
+            }
+          </div>
+
+          <!-- Note informativa -->
+          <div class="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5 flex gap-2 text-xs text-amber-800">
+            <i class="pi pi-info-circle flex-shrink-0 mt-0.5"></i>
+            <span>Dopo la registrazione il tuo profilo sarà in attesa di attivazione da parte dell'amministratore.</span>
+          </div>
+
+          <p-button
+            type="submit"
+            label="Crea account"
+            icon="pi pi-user-plus"
+            [loading]="loading()"
+            styleClass="w-full mt-1"
+          />
+
+        </form>
+
+        <p class="text-center text-sm text-gray-500 mt-6">
+          Hai già un account?
+          <a [routerLink]="loginUrl" class="text-indigo-600 font-medium hover:text-indigo-800">Accedi</a>
+        </p>
+      </div>
+    }
+
+  </div>
+</div>

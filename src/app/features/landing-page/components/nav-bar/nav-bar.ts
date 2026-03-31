@@ -5,18 +5,22 @@ import {
   OnDestroy,
   signal,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
+import { globalPaths } from '../../../_config/global-paths.config';
 
 @Component({
   selector: 'app-nav-bar',
-  imports: [ButtonModule, DrawerModule],
+  imports: [ButtonModule, DrawerModule, RouterLink],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.scss',
 })
 export class NavBar implements OnDestroy {
   protected readonly isScrolled = signal(false);
   protected readonly mobileMenuOpen = signal(false);
+
+  readonly loginUrl = globalPaths.loginUrl;
 
   protected readonly navLinks = [
     { label: 'Filosofia', anchor: '#filosofia' },

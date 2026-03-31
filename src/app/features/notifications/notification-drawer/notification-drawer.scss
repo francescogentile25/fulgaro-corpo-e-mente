@@ -1,0 +1,122 @@
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .drawer-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+
+    i { color: #64748b; }
+  }
+
+  .unread-chip {
+    background: #3b82f6;
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    line-height: 1.6;
+  }
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+
+  i { font-size: 2rem; }
+  span { font-size: 0.9375rem; }
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 0.875rem 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+
+  &:hover { background: #f8fafc; }
+
+  &--unread {
+    background: #eff6ff;
+    &:hover { background: #dbeafe; }
+
+    .notif-titolo { font-weight: 700; }
+  }
+}
+
+.notif-icon {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.125rem;
+
+  i { font-size: 1rem; }
+}
+
+.notif-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-titolo {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 0.2rem;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.notif-messaggio {
+  font-size: 0.8125rem;
+  color: #475569;
+  line-height: 1.4;
+  margin-bottom: 0.35rem;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.notif-date {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.unread-dot {
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #3b82f6;
+  margin-top: 0.4rem;
+}
+
+:host ::ng-deep .notif-divider {
+  margin: 0 !important;
+}

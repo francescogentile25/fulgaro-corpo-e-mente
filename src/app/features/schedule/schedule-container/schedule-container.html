@@ -1,0 +1,124 @@
+<div class="schedule-layout">
+
+  <!-- ── Pannello sinistro: lista atleti ─────────────────────────────── -->
+  <aside class="schedule-aside" [class.schedule-aside--hidden]="hasChild()">
+
+    <div class="aside-header">
+      <h2 class="text-base font-semibold text-slate-800 mb-3">Schede Atleti</h2>
+
+      <!-- Ricerca per nome/cognome -->
+      <div class="relative mb-2">
+        <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"></i>
+        <input
+          pInputText
+          type="text"
+          [value]="searchText()"
+          (input)="searchText.set($any($event.target).value)"
+          placeholder="Cerca nome, cognome…"
+          class="w-full !pl-9 text-sm"
+        />
+      </div>
+
+      <!-- Filtro per gruppo -->
+      <p-select
+        [options]="groupOptions()"
+        [ngModel]="selectedGroup()"
+        (ngModelChange)="selectedGroup.set($event)"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Tutti i gruppi"
+        styleClass="w-full text-sm"
+      />
+    </div>
+
+    <!-- Lista atleti -->
+    <div class="aside-list">
+
+      @if (atletaStore.loading()) {
+        <div class="p-4 space-y-3">
+          @for (_ of [1,2,3,4,5]; track _) {
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+              <div class="flex-1">
+                <div class="h-3 bg-slate-200 rounded w-3/5 mb-1.5 animate-pulse"></div>
+                <div class="h-2.5 bg-slate-200 rounded w-2/5 animate-pulse"></div>
+              </div>
+            </div>
+          }
+        </div>
+
+      } @else if (filteredAtleti().length === 0) {
+        <div class="flex flex-col items-center justify-center py-12 text-slate-400">
+          <i class="pi pi-users text-3xl mb-3 text-slate-300"></i>
+          <p class="text-sm">Nessun atleta trovato</p>
+        </div>
+
+      } @else {
+        @for (atleta of filteredAtleti(); track atleta.id) {
+          <button
+            type="button"
+            class="atleta-item"
+            [class.atleta-item--selected]="selectedId() === atleta.id"
+            (click)="selectAtleta(atleta)"
+          >
+            <!-- Avatar -->
+            <p-avatar
+              [label]="getInitials(atleta)"
+              shape="circle"
+              [style]="{
+                'background-color': selectedId() === atleta.id ? '#3b82f6' : '#e2e8f0',
+                'color':            selectedId() === atleta.id ? '#ffffff' : '#475569',
+                'font-size':        '0.75rem',
+                'font-weight':      '600'
+              }"
+              size="normal"
+            />
+
+            <!-- Info -->
+            <div class="flex-1 min-w-0 text-left">
+              <div class="font-medium text-slate-800 text-sm truncate">
+                {{ atleta.nome }} {{ atleta.cognome }}
+              </div>
+              <div class="text-xs text-slate-400 truncate">{{ atleta.email }}</div>
+              @if (getGroupName(atleta.group_id)) {
+                <span class="group-badge">{{ getGroupName(atleta.group_id) }}</span>
+              }
+            </div>
+
+            <!-- Badge inattivo -->
+            @if (!atleta.attivo) {
+              <span class="inactive-badge">Inattivo</span>
+            }
+
+            <i class="pi pi-chevron-right text-slate-300 text-xs flex-shrink-0"></i>
+          </button>
+        }
+      }
+
+    </div>
+
+    <div class="aside-footer">
+      {{ filteredAtleti().length }} atleti
+    </div>
+  </aside>
+
+  <!-- ── Area schedule ──────────────────────────────────────────────── -->
+  <main class="schedule-main" [class.schedule-main--empty]="!hasChild()">
+
+    @if (!hasChild()) {
+      <!-- Placeholder desktop -->
+      <div class="flex flex-col items-center justify-center flex-1 text-slate-400 p-8">
+        <div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+          <i class="pi pi-calendar text-3xl text-slate-300"></i>
+        </div>
+        <p class="text-base font-medium text-slate-600">Seleziona un atleta</p>
+        <p class="text-sm text-slate-400 mt-1 text-center max-w-xs">
+          Clicca su un atleta nel pannello a sinistra per visualizzare e modificare la sua scheda settimanale
+        </p>
+      </div>
+    }
+
+    <router-outlet />
+  </main>
+
+</div>

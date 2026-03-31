@@ -1,0 +1,171 @@
+<div class="p-6">
+
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Gruppi</h1>
+      <p class="text-slate-500 text-sm mt-0.5">Gestisci i gruppi di allenamento (sedi)</p>
+    </div>
+    <p-button
+      label="Nuovo gruppo"
+      icon="pi pi-plus"
+      (onClick)="openCreate()"
+    />
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <p-table
+      [value]="store.entities()"
+      [loading]="store.loading()"
+      [paginator]="store.count() > 10"
+      [rows]="10"
+      styleClass="p-datatable-sm"
+      dataKey="id"
+    >
+      <ng-template #header>
+        <tr>
+          <th class="w-8">#</th>
+          <th>Nome gruppo</th>
+          <th>Data creazione</th>
+          <th class="w-28 text-center">Azioni</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-group let-i="rowIndex">
+        <tr>
+          <td class="text-slate-400 text-sm">{{ i + 1 }}</td>
+          <td>
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center">
+                <i class="pi pi-sitemap text-indigo-500 text-xs"></i>
+              </span>
+              <span class="font-medium text-slate-800">{{ group.nome }}</span>
+            </div>
+          </td>
+          <td class="text-slate-500 text-sm">{{ group.created_at | date:'dd/MM/yyyy' }}</td>
+          <td>
+            <div class="flex justify-center gap-1">
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                variant="text"
+                size="small"
+                pTooltip="Modifica"
+                tooltipPosition="top"
+                (onClick)="openEdit(group)"
+              />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                variant="text"
+                size="small"
+                pTooltip="Elimina"
+                tooltipPosition="top"
+                (onClick)="confirmDelete(group)"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #empty>
+        <tr>
+          <td colspan="4">
+            <div class="flex flex-col items-center justify-center py-12 text-slate-400">
+              <i class="pi pi-sitemap text-4xl mb-3"></i>
+              <p class="font-medium">Nessun gruppo trovato</p>
+              <p class="text-sm mt-1">Crea il primo gruppo con il pulsante in alto a destra.</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>
+
+<!-- ── Dialog Crea / Modifica ──────────────────────────────── -->
+<p-dialog
+  [(visible)]="dialogVisible"
+  [header]="editingGroup ? 'Modifica gruppo' : 'Nuovo gruppo'"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '420px' }"
+  (onHide)="form.reset()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4 pt-2">
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-medium text-slate-700">Nome gruppo *</label>
+      <input
+        pInputText
+        formControlName="nome"
+        placeholder="Es. Villa Gordiani, Sapienza Sport…"
+        class="w-full"
+        [invalid]="form.controls.nome.invalid && form.controls.nome.touched"
+      />
+      @if (form.controls.nome.invalid && form.controls.nome.touched) {
+        <p-message severity="error" size="small" variant="simple">
+          @if (form.controls.nome.errors?.['required']) { Nome obbligatorio }
+          @if (form.controls.nome.errors?.['minlength']) { Minimo 2 caratteri }
+        </p-message>
+      }
+    </div>
+
+  </form>
+
+  <ng-template #footer>
+    <p-button
+      label="Annulla"
+      severity="secondary"
+      variant="text"
+      (onClick)="dialogVisible = false"
+    />
+    <p-button
+      label="Salva"
+      icon="pi pi-check"
+      [loading]="store.loading()"
+      (onClick)="save()"
+    />
+  </ng-template>
+</p-dialog>
+
+<!-- ── Dialog Conferma Eliminazione ───────────────────────── -->
+<p-dialog
+  [(visible)]="deleteVisible"
+  header="Conferma eliminazione"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '420px' }"
+>
+  <div class="flex items-start gap-4 py-2">
+    <span class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+      <i class="pi pi-exclamation-triangle text-red-500"></i>
+    </span>
+    <div>
+      <p class="text-slate-800 font-medium">
+        Eliminare il gruppo <strong>{{ groupToDelete?.nome }}</strong>?
+      </p>
+      <p class="text-sm text-slate-500 mt-1">
+        Questa azione non può essere annullata. Gli atleti associati perderanno il gruppo.
+      </p>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button
+      label="Annulla"
+      severity="secondary"
+      variant="text"
+      (onClick)="deleteVisible = false"
+    />
+    <p-button
+      label="Elimina"
+      severity="danger"
+      icon="pi pi-trash"
+      [loading]="store.loading()"
+      (onClick)="doDelete()"
+    />
+  </ng-template>
+</p-dialog>
