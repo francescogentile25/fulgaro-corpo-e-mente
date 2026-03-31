@@ -36,31 +36,30 @@
         <i class="pi pi-spin pi-spinner"></i>
         <span>Caricamento...</span>
       </div>
-    } @else if (notificationStore.entities().length === 0) {
+    } @else if (notificationStore.unreadCount() === 0) {
       <div class="empty-state">
         <i class="pi pi-bell-slash"></i>
-        <span>Nessuna notifica</span>
+        <span>Nessuna notifica non letta</span>
       </div>
     } @else {
       @for (n of notificationStore.entities(); track n.id) {
-        <div
-          class="notification-item"
-          [class.notification-item--unread]="!n.letta"
-          (click)="markAsRead(n)"
-        >
-          <div class="notif-icon" [style.color]="getIconColor(n.tipo)" [style.background]="getIconColor(n.tipo) + '1a'">
-            <i [class]="getIcon(n.tipo)"></i>
-          </div>
-          <div class="notif-body">
-            <p class="notif-titolo">{{ n.titolo }}</p>
-            <p class="notif-messaggio">{{ n.messaggio }}</p>
-            <p class="notif-date">{{ n.created_at | date: 'dd MMM yyyy, HH:mm' : '' : 'it' }}</p>
-          </div>
-          @if (!n.letta) {
+        @if (!n.letta) {
+          <div
+            class="notification-item notification-item--unread"
+            (click)="markAsRead(n)"
+          >
+            <div class="notif-icon" [style.color]="getIconColor(n.tipo)" [style.background]="getIconColor(n.tipo) + '1a'">
+              <i [class]="getIcon(n.tipo)"></i>
+            </div>
+            <div class="notif-body">
+              <p class="notif-titolo">{{ n.titolo }}</p>
+              <p class="notif-messaggio">{{ n.messaggio }}</p>
+              <p class="notif-date">{{ n.created_at | date: 'dd MMM yyyy, HH:mm' : '' : 'it' }}</p>
+            </div>
             <span class="unread-dot" aria-label="Non letta"></span>
-          }
-        </div>
-        <p-divider styleClass="notif-divider" />
+          </div>
+          <p-divider styleClass="notif-divider" />
+        }
       }
     }
   </div>

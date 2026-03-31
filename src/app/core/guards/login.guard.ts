@@ -16,12 +16,7 @@ export const loginGuard: CanActivateFn = (route, state) => {
     take(1),
     map(() => {
       if (authStore.isAuthenticated()) {
-        messageService.add({
-          severity: 'warn',
-          summary: `[Login Guard]`,
-          detail: 'Sei già autenticato'
-        });
-        return router.createUrlTree([globalPaths.homeUrl]);
+        return router.createUrlTree([globalPaths.dashboardUrl]);
       }
 
       // Utente non loggato, può accedere alla pagina di login

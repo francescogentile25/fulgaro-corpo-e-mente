@@ -4,9 +4,10 @@ import { authGuard } from "../../core/guards/auth.guard";
 import { adminGuard } from "../../core/guards/admin.guard";
 
 export const layoutRoutes: Routes = [
-  // Landing page pubblica
+  // Landing page: se già loggato → redirect a dashboard
   {
     path: '',
+    canActivate: [loginGuard],
     loadComponent: () => import('../landing-page/landing-page').then(c => c.LandingPage)
   },
   {

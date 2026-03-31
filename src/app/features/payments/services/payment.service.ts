@@ -126,7 +126,7 @@ export class PaymentService {
             .select('id')
             .eq('ruolo', 'admin')
             .limit(1)
-            .single()
+            .maybeSingle()
         ).pipe(
           switchMap(({ data: admin }) => {
             if (!admin) return of(payment);
@@ -224,7 +224,7 @@ export class PaymentService {
             .select('id')
             .eq('ruolo', 'admin')
             .limit(1)
-            .single()
+            .maybeSingle()
         ).pipe(
           switchMap(({ data: admin }) => {
             if (!admin) return of(undefined);

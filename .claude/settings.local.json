@@ -13,7 +13,14 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git remote:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(timeout 15)",
+      "Bash(node -e \"const p=require\\(''./package.json''\\); console.log\\(''name:'', p.name\\); console.log\\(''build:'', p.scripts?.build\\);\")",
+      "Bash(gh auth:*)",
+      "Bash(node -e \"const a=require\\(''./angular.json''\\); const proj=Object.keys\\(a.projects\\)[0]; const build=a.projects[proj].architect.build; console.log\\(''project:'', proj\\); console.log\\(''outputPath:'', build.options.outputPath\\); console.log\\(''browser:'', build.options.browser\\);\")",
+      "Bash(node -e \"const a=require\\(''''./angular.json''''\\); const proj=Object.keys\\(a.projects\\)[0]; console.log\\(JSON.stringify\\(a.projects[proj].architect.build.options, null, 2\\)\\);\")",
+      "Bash(ls dist/*/)",
+      "Bash(npm run:*)"
     ]
   }
 }

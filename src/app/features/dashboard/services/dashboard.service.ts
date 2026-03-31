@@ -32,6 +32,19 @@ export interface AdminStats {
   percCompletamentoSettimana: number;
 }
 
+export interface AdminWeeklyStats {
+  labels: string[];
+  assigned: number[];
+  completed: number[];
+}
+
+export interface AtletaWeeklyKm {
+  labels: string[];
+  km: number[];
+  tipoLabels: string[];
+  tipoData: number[];
+}
+
 // ─── HELPERS PRIVATI ─────────────────────────────────────────────────────────
 
 function getWeekRange(date: Date): { start: string; end: string } {
@@ -142,6 +155,88 @@ export class DashboardService {
           percCompletamentoSettimana: percCompl,
           nextWorkouts:              (nextWorkouts.data ?? []) as unknown as NextWorkout[],
         };
+      })
+    );
+  }
+
+  /** Admin: ultime 4 settimane — allenamenti assegnati vs completati */
+  getAdminWeeklyStats(): Observable<AdminWeeklyStats> {
+    const weeks = Array.from({ length: 4 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i * 7);
+      return getWeekRange(d);
+    });
+
+    return forkJoin(
+      weeks.map(range =>
+        from(
+          this.supabase.client
+            .from('workout_assignments')
+            .select('id, completato')
+            .gte('data_workout', range.start)
+            .lte('data_workout', range.end)
+        ).pipe(map(({ data }) => ({ range, data: (data ?? []) as { completato: boolean }[] })))
+      )
+    ).pipe(
+      map(results => {
+        const reversed = [...results].reverse();
+        return {
+          labels:    reversed.map(r => {
+            const d = new Date(r.range.start);
+            return d.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
+          }),
+          assigned:  reversed.map(r => r.data.length),
+          completed: reversed.map(r => r.data.filter(a => a.completato).length),
+        };
+      })
+    );
+  }
+
+  /** Atleta: ultime 6 settimane — km per settimana + distribuzione tipi */
+  getAtletaWeeklyKm(atletaId: string): Observable<AtletaWeeklyKm> {
+    const exerciseSel = 'tipo, distanza_km, distanza_gara_km, exercise_blocks(distanza_m, ripetizioni)';
+    const weeks = Array.from({ length: 6 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i * 7);
+      return getWeekRange(d);
+    });
+
+    return forkJoin(
+      weeks.map(range =>
+        from(
+          this.supabase.client
+            .from('workout_assignments')
+            .select(`exercise:exercises(${exerciseSel})`)
+            .eq('atleta_id', atletaId)
+            .gte('data_workout', range.start)
+            .lte('data_workout', range.end)
+        ).pipe(map(({ data }) => ({ range, data: (data ?? []) as any[] })))
+      )
+    ).pipe(
+      map(results => {
+        const reversed = [...results].reverse();
+        const labels = reversed.map(r => {
+          const d = new Date(r.range.start);
+          return d.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
+        });
+        const km = reversed.map(r =>
+          Math.round(r.data.reduce((s: number, a: any) => s + calcKmFromExercise(a.exercise), 0) * 10) / 10
+        );
+
+        // Distribuzione tipi su tutte le settimane
+        const tipoMap: Record<string, string> = {
+          continua: 'Corsa continua', intervallato: 'Intervalli',
+          potenziamento: 'Potenziamento', riposo: 'Riposo', gara: 'Gara',
+        };
+        const tipoCounts: Record<string, number> = {};
+        results.flatMap(r => r.data).forEach((a: any) => {
+          const t = a.exercise?.tipo ?? 'altro';
+          tipoCounts[t] = (tipoCounts[t] ?? 0) + 1;
+        });
+        const tipoLabels = Object.keys(tipoCounts).map(k => tipoMap[k] ?? k);
+        const tipoData   = Object.values(tipoCounts);
+
+        return { labels, km, tipoLabels, tipoData };
       })
     );
   }

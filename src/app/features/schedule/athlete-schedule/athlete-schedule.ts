@@ -10,6 +10,8 @@ import { DrawerModule } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { DialogModule } from 'primeng/dialog';
@@ -55,7 +57,8 @@ function addDays(d: Date, n: number): Date {
   imports: [
     ReactiveFormsModule, FormsModule, RouterLink, DatePipe,
     ButtonModule, DrawerModule, InputTextModule, TextareaModule,
-    SelectModule, TagModule, TooltipModule, DialogModule,
+    SelectModule, SelectButtonModule, InputNumberModule,
+    TagModule, TooltipModule, DialogModule,
     SkeletonModule, DividerModule, WorkoutDetailPanel,
   ],
   templateUrl: './athlete-schedule.html',
@@ -133,6 +136,11 @@ export class AthleteSchedule implements OnInit {
     { label: 'Attivo',  value: 'attivo' },
   ];
 
+  readonly modalitaOptions = [
+    { label: 'Strutturato', value: 'strutturato', icon: 'pi pi-list' },
+    { label: 'Testo libero', value: 'testo_libero', icon: 'pi pi-align-left' },
+  ];
+
   // ── Form ──────────────────────────────────────────────────
   form = this.fb.group({
     nome:             [''],
@@ -155,6 +163,11 @@ export class AthleteSchedule implements OnInit {
   // ── Init ──────────────────────────────────────────────────
 
   ngOnInit(): void {
+    // Quando l'utente passa a testo_libero, svuota i blocchi
+    this.form.get('modalita')!.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(m => { if (m === 'testo_libero') this.blocks.clear(); });
+
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {

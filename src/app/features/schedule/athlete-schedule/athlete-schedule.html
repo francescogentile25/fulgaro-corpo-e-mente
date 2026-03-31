@@ -214,36 +214,25 @@
   [(visible)]="drawerVisible"
   [header]="drawerHeader()"
   position="right"
-  [style]="{ width: '100%', maxWidth: '520px' }"
+  [style]="{ width: 'min(760px, 100dvw)' }"
   [modal]="true"
   (onHide)="form.reset()"
 >
   <form [formGroup]="form" class="flex flex-col gap-5 pb-24">
 
-    <!-- ── Tabs Modalità ────────────────────────────────── -->
-    <div class="flex border-b border-slate-200 -mx-4 px-4">
-      <button
-        type="button"
-        class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors mr-1"
-        [class.border-indigo-600]="modalitaValue === 'strutturato'"
-        [class.text-indigo-700]="modalitaValue === 'strutturato'"
-        [class.border-transparent]="modalitaValue !== 'strutturato'"
-        [class.text-slate-500]="modalitaValue !== 'strutturato'"
-        (click)="setModalita('strutturato')"
+    <!-- ── Modalità (SelectButton PrimeNG) ──────────────── -->
+    <div class="flex justify-center">
+      <p-selectButton
+        formControlName="modalita"
+        [options]="modalitaOptions"
+        optionLabel="label"
+        optionValue="value"
+        [allowEmpty]="false"
       >
-        <i class="pi pi-list mr-1.5"></i>Strutturato
-      </button>
-      <button
-        type="button"
-        class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors"
-        [class.border-indigo-600]="modalitaValue === 'testo_libero'"
-        [class.text-indigo-700]="modalitaValue === 'testo_libero'"
-        [class.border-transparent]="modalitaValue !== 'testo_libero'"
-        [class.text-slate-500]="modalitaValue !== 'testo_libero'"
-        (click)="setModalita('testo_libero')"
-      >
-        <i class="pi pi-align-left mr-1.5"></i>Testo libero
-      </button>
+        <ng-template #item let-opt>
+          <i [class]="opt.icon + ' mr-2'"></i>{{ opt.label }}
+        </ng-template>
+      </p-selectButton>
     </div>
 
     <!-- ── Campi comuni ─────────────────────────────────── -->
@@ -287,15 +276,15 @@
             </div>
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-medium text-slate-600">Distanza (km)</label>
-              <input type="number" pInputText formControlName="distanza_km" placeholder="10.0" step="0.1" min="0" class="w-full" />
+              <p-inputnumber formControlName="distanza_km" [fluid]="true" [minFractionDigits]="1" [maxFractionDigits]="2" [min]="0" suffix=" km" placeholder="es. 10.0" />
             </div>
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-medium text-slate-600">Durata (min)</label>
-              <input type="number" pInputText formControlName="durata_min" placeholder="60" min="0" class="w-full" />
+              <p-inputnumber formControlName="durata_min" [fluid]="true" [min]="0" suffix=" min" placeholder="es. 60" />
             </div>
             <div class="flex flex-col gap-1.5 col-span-2">
               <label class="text-xs font-medium text-slate-600">Ritmo obiettivo (min/km)</label>
-              <input pInputText formControlName="ritmo_obiettivo" placeholder="4:30" class="w-full" />
+              <input pInputText formControlName="ritmo_obiettivo" placeholder="es. 4:30" class="w-full" />
             </div>
           </div>
         </div>
@@ -308,11 +297,11 @@
           <div class="grid grid-cols-2 gap-3">
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-medium text-slate-600">Distanza (km)</label>
-              <input type="number" pInputText formControlName="distanza_gara_km" placeholder="21.097" step="0.001" min="0" class="w-full" />
+              <p-inputnumber formControlName="distanza_gara_km" [fluid]="true" [minFractionDigits]="1" [maxFractionDigits]="3" [min]="0" suffix=" km" placeholder="es. 21.1" />
             </div>
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-medium text-slate-600">Ritmo obiettivo</label>
-              <input pInputText formControlName="ritmo_obiettivo" placeholder="5:00" class="w-full" />
+              <input pInputText formControlName="ritmo_obiettivo" placeholder="es. 5:00" class="w-full" />
             </div>
           </div>
         </div>
@@ -367,46 +356,23 @@
                   />
                 </div>
 
-                <!-- Block fields — 2 colonne su mobile, 2 su desktop -->
+                <!-- Block fields — 2 colonne -->
                 <div class="grid grid-cols-2 gap-3">
                   <div class="flex flex-col gap-1">
                     <label class="text-xs text-slate-500 font-medium">Ripetizioni *</label>
-                    <input
-                      type="number" pInputText
-                      formControlName="ripetizioni"
-                      min="1"
-                      class="w-full"
-                    />
+                    <p-inputnumber formControlName="ripetizioni" [fluid]="true" [min]="1" [showButtons]="true" />
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-xs text-slate-500 font-medium">Distanza (m) *</label>
-                    <input
-                      type="number" pInputText
-                      formControlName="distanza_m"
-                      min="1"
-                      placeholder="400"
-                      class="w-full"
-                    />
+                    <p-inputnumber formControlName="distanza_m" [fluid]="true" [min]="1" suffix=" m" placeholder="es. 400" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <label class="text-xs text-slate-500 font-medium">Ritmo (opt)</label>
-                    <input
-                      pInputText
-                      formControlName="ritmo_obiettivo"
-                      placeholder="3:50"
-                      class="w-full"
-                    />
+                    <label class="text-xs text-slate-500 font-medium">Ritmo obiettivo</label>
+                    <input pInputText formControlName="ritmo_obiettivo" placeholder="es. 3:50" class="w-full" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <label class="text-xs text-slate-500 font-medium">Rec. (min)</label>
-                    <input
-                      type="number" pInputText
-                      formControlName="recupero_min"
-                      placeholder="2"
-                      step="0.5"
-                      min="0"
-                      class="w-full"
-                    />
+                    <label class="text-xs text-slate-500 font-medium">Recupero (min)</label>
+                    <p-inputnumber formControlName="recupero_min" [fluid]="true" [min]="0" [minFractionDigits]="0" [maxFractionDigits]="1" suffix=" min" placeholder="es. 2" />
                   </div>
                 </div>
 

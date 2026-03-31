@@ -22,11 +22,17 @@ export class ScheduleService {
         .gte('data_workout', fromDate)
         .lte('data_workout', toDate)
         .order('data_workout', { ascending: true })
-        .order('ordine', { referencedTable: 'exercise_blocks', ascending: true })
     ).pipe(
       map(({ data, error }) => {
         if (error) throw error;
-        return (data ?? []) as WorkoutAssignmentModel[];
+        const assignments = (data ?? []) as WorkoutAssignmentModel[];
+        // PostgREST non supporta order su relazioni annidate a 2 livelli: ordiniamo lato client
+        return assignments.map(a => ({
+          ...a,
+          exercise: a.exercise
+            ? { ...a.exercise, exercise_blocks: [...(a.exercise.exercise_blocks ?? [])].sort((x: any, y: any) => x.ordine - y.ordine) }
+            : a.exercise,
+        }));
       })
     );
   }
