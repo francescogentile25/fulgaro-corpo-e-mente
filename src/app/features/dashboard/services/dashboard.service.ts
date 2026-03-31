@@ -140,7 +140,7 @@ export class DashboardService {
           allenamentiSettimana:      totaleSettimana,
           completatiSettimana,
           percCompletamentoSettimana: percCompl,
-          nextWorkouts:              (nextWorkouts.data ?? []) as NextWorkout[],
+          nextWorkouts:              (nextWorkouts.data ?? []) as unknown as NextWorkout[],
         };
       })
     );

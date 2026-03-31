@@ -55,8 +55,8 @@ export const PaymentStore = signalStore(
       loaderService.startSpinLoader();
       service.getMyPayments().subscribe({
         next: (payments) => {
-          // Per l'atleta non c'è il campo atleta join → cast a PaymentWithAtleta
-          const withAtleta = payments.map(p => ({ ...p, atleta: null }));
+          // Per l'atleta non c'è il campo atleta join → cast esplicito a PaymentWithAtleta
+          const withAtleta: PaymentWithAtleta[] = payments.map(p => ({ ...p, atleta: null as PaymentWithAtleta['atleta'] }));
           patchState(store, setAllEntities(withAtleta), { loading: false });
           loaderService.stopSpinLoader();
         },
