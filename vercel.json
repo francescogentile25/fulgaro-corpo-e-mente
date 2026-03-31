@@ -1,6 +1,6 @@
 {
   "buildCommand": "ng build",
-  "outputDirectory": "dist/schededamiano-fe/browser",
+  "outputDirectory": "dist/SchedeDamiano.FE/browser",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
