@@ -10,6 +10,15 @@ export const layoutRoutes: Routes = [
     canActivate: [loginGuard],
     loadComponent: () => import('../landing-page/landing-page').then(c => c.LandingPage)
   },
+  // Sezione articoli pubblica
+  {
+    path: 'articoli',
+    loadComponent: () => import('../articles/articles-public-page/articles-public-page').then(c => c.ArticlesPublicPage)
+  },
+  {
+    path: 'articoli/:slug',
+    loadComponent: () => import('../articles/article-detail-page/article-detail-page').then(c => c.ArticleDetailPage)
+  },
   {
     path: 'app',
     children: [
@@ -70,6 +79,22 @@ export const layoutRoutes: Routes = [
             path: 'payments',
             canActivate: [authGuard],
             loadComponent: () => import('../payments/payments-page/payments-page').then(c => c.PaymentsPage),
+          },
+          // Articoli (admin)
+          {
+            path: 'articoli',
+            canActivate: [adminGuard],
+            loadComponent: () => import('../articles/articles-admin-page/articles-admin-page').then(c => c.ArticlesAdminPage)
+          },
+          {
+            path: 'articoli/nuovo',
+            canActivate: [adminGuard],
+            loadComponent: () => import('../articles/article-editor-page/article-editor-page').then(c => c.ArticleEditorPage)
+          },
+          {
+            path: 'articoli/:id/modifica',
+            canActivate: [adminGuard],
+            loadComponent: () => import('../articles/article-editor-page/article-editor-page').then(c => c.ArticleEditorPage)
           },
           // Redirect /app → /app/dashboard
           {

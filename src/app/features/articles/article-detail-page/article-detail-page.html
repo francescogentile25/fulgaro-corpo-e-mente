@@ -1,0 +1,28 @@
+<app-nav-bar />
+
+<main class="article-detail">
+  @if (loading()) {
+    <div class="state"><i class="pi pi-spin pi-spinner"></i> Caricamento…</div>
+  } @else if (notFound()) {
+    <div class="state">
+      <h2>Articolo non trovato</h2>
+      <a routerLink="/articoli">← Torna agli articoli</a>
+    </div>
+  } @else if (article(); as a) {
+    @if (a.cover_image) {
+      <div class="cover" [style.backgroundImage]="'url(' + a.cover_image + ')'"></div>
+    }
+
+    <article class="container">
+      <header class="head">
+        <a class="back" routerLink="/articoli">← Tutti gli articoli</a>
+        <h1>{{ a.title }}</h1>
+        <time>{{ a.published_at | date:'dd MMMM yyyy' }}</time>
+      </header>
+
+      <div class="body" [innerHTML]="body()"></div>
+    </article>
+  }
+</main>
+
+<app-landing-footer />

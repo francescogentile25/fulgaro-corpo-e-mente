@@ -1,0 +1,29 @@
+@if (articles().length > 0) {
+  <section class="articles-section" id="blog">
+    <div class="container">
+      <header class="head">
+        <h2>Dal blog</h2>
+        <p>Consigli, approfondimenti e storie dal nostro mondo</p>
+      </header>
+
+      <div class="grid">
+        @for (a of articles(); track a.id) {
+          <a class="card" [routerLink]="['/articoli', a.slug]">
+            @if (a.cover_image) {
+              <div class="cover"><img [src]="a.cover_image" [alt]="a.title" /></div>
+            }
+            <div class="body">
+              <time>{{ a.published_at | date:'dd MMM yyyy' }}</time>
+              <h3>{{ a.title }}</h3>
+              @if (a.excerpt) { <p>{{ a.excerpt }}</p> }
+            </div>
+          </a>
+        }
+      </div>
+
+      <div class="cta">
+        <a routerLink="/articoli">Leggi tutti gli articoli →</a>
+      </div>
+    </div>
+  </section>
+}

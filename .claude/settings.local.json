@@ -20,7 +20,13 @@
       "Bash(node -e \"const a=require\\(''./angular.json''\\); const proj=Object.keys\\(a.projects\\)[0]; const build=a.projects[proj].architect.build; console.log\\(''project:'', proj\\); console.log\\(''outputPath:'', build.options.outputPath\\); console.log\\(''browser:'', build.options.browser\\);\")",
       "Bash(node -e \"const a=require\\(''''./angular.json''''\\); const proj=Object.keys\\(a.projects\\)[0]; console.log\\(JSON.stringify\\(a.projects[proj].architect.build.options, null, 2\\)\\);\")",
       "Bash(ls dist/*/)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__list_projects",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__list_tables",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__restore_project",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__get_project",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__execute_sql",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__apply_migration"
     ]
   }
 }

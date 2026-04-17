@@ -1,0 +1,43 @@
+<app-nav-bar />
+
+<main class="articles-public">
+  <section class="hero">
+    <div class="container">
+      <h1>Blog &amp; News</h1>
+      <p>Articoli, consigli e approfondimenti dal mondo di Fulgaro Corpo e Mente.</p>
+    </div>
+  </section>
+
+  <section class="grid-section">
+    <div class="container">
+      @if (loading()) {
+        <div class="loading">
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>Caricamento…</span>
+        </div>
+      } @else if (articles().length === 0) {
+        <div class="empty">Nessun articolo ancora pubblicato.</div>
+      } @else {
+        <div class="grid">
+          @for (a of articles(); track a.id) {
+            <a class="card" [routerLink]="['/articoli', a.slug]">
+              @if (a.cover_image) {
+                <div class="cover"><img [src]="a.cover_image" [alt]="a.title" /></div>
+              } @else {
+                <div class="cover cover--placeholder"><i class="pi pi-image"></i></div>
+              }
+              <div class="body">
+                <time>{{ a.published_at | date:'dd MMM yyyy' }}</time>
+                <h3>{{ a.title }}</h3>
+                @if (a.excerpt) { <p>{{ a.excerpt }}</p> }
+                <span class="read">Leggi →</span>
+              </div>
+            </a>
+          }
+        </div>
+      }
+    </div>
+  </section>
+</main>
+
+<app-landing-footer />

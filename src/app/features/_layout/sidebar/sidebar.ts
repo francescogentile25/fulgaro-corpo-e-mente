@@ -36,6 +36,7 @@ export class Sidebar {
     { label: 'Schede',         icon: 'pi-calendar',    route: globalPaths.schedeUrl,        adminOnly: true },
     { label: 'Atleti',         icon: 'pi-users',       route: globalPaths.athletesUrl,      adminOnly: true },
     { label: 'Gruppi',         icon: 'pi-sitemap',     route: globalPaths.groupsUrl,        adminOnly: true },
+    { label: 'Articoli',       icon: 'pi-file-edit',   route: globalPaths.articlesAdminUrl, adminOnly: true },
     // Atleta
     { label: 'La mia scheda',  icon: 'pi-calendar',    route: globalPaths.miaSchedaUrl,     atletaOnly: true },
     // Tutti
