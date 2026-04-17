@@ -13,7 +13,13 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git remote:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__list_projects",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__list_tables",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__restore_project",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__get_project",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__execute_sql",
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__apply_migration"
     ]
   }
 }

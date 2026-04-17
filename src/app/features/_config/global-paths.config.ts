@@ -9,8 +9,13 @@ const miaSchedaUrl: string     = '/app/la-mia-scheda';
 const performanceUrl: string   = '/app/performance';
 const notificationsUrl: string = '/app/notifications';
 const paymentsUrl: string      = '/app/payments';
+const articlesAdminUrl: string = '/app/articoli';
+const articlesPublicUrl: string = '/articoli';
 
-const schedeAtletaUrl = (atletaId: string): string => `${schedeUrl}/${atletaId}`;
+const schedeAtletaUrl    = (atletaId: string): string => `${schedeUrl}/${atletaId}`;
+const articleEditUrl     = (id: string): string => `${articlesAdminUrl}/${id}/modifica`;
+const articleNewUrl      = `${articlesAdminUrl}/nuovo`;
+const articlePublicUrl   = (slug: string): string => `${articlesPublicUrl}/${slug}`;
 
 export const globalPaths = {
   homeUrl,
@@ -25,4 +30,9 @@ export const globalPaths = {
   performanceUrl,
   notificationsUrl,
   paymentsUrl,
+  articlesAdminUrl,
+  articlesPublicUrl,
+  articleEditUrl,
+  articleNewUrl,
+  articlePublicUrl,
 }

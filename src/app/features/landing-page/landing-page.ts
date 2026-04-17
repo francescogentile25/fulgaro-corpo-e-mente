@@ -8,6 +8,7 @@ import { LocationsSection } from './components/locations-section/locations-secti
 import { RaceMomentSection } from './components/race-moment-section/race-moment-section';
 import { CtaSection } from './components/cta-section/cta-section';
 import { LandingFooter } from './components/landing-footer/landing-footer';
+import { ArticlesSection } from './components/articles-section/articles-section';
 
 @Component({
   selector: 'app-landing-page',
@@ -19,6 +20,7 @@ import { LandingFooter } from './components/landing-footer/landing-footer';
     ProgramsSection,
     LocationsSection,
     RaceMomentSection,
+    ArticlesSection,
     CtaSection,
     LandingFooter,
   ],

@@ -1,0 +1,67 @@
+<div class="p-4 md:p-6">
+  <header class="flex items-center justify-between mb-4 flex-wrap gap-3">
+    <div>
+      <h1 class="text-2xl font-bold m-0">Articoli</h1>
+      <p class="text-sm text-slate-500 m-0 mt-1">Gestisci i contenuti pubblicati nella sezione blog</p>
+    </div>
+    <a pButton routerLink="/app/articoli/nuovo" icon="pi pi-plus" label="Nuovo articolo"></a>
+  </header>
+
+  <p-table
+    [value]="store.entities()"
+    [loading]="store.loading()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    styleClass="p-datatable-sm"
+    [globalFilterFields]="['title', 'slug']">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Titolo</th>
+        <th style="width: 10rem">Stato</th>
+        <th style="width: 12rem">Pubblicato</th>
+        <th style="width: 12rem">Aggiornato</th>
+        <th style="width: 9rem"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-a>
+      <tr>
+        <td>
+          <div class="flex items-center gap-3">
+            @if (a.cover_image) {
+              <img [src]="a.cover_image" alt="" class="w-12 h-12 object-cover rounded" />
+            }
+            <div class="min-w-0">
+              <div class="font-medium truncate">{{ a.title }}</div>
+              <div class="text-xs text-slate-500 truncate">/{{ a.slug }}</div>
+            </div>
+          </div>
+        </td>
+        <td><p-tag [value]="statusLabel(a)" [severity]="statusSeverity(a)"></p-tag></td>
+        <td class="text-sm text-slate-600">
+          {{ a.published_at ? (a.published_at | date:'dd/MM/yyyy HH:mm') : '—' }}
+        </td>
+        <td class="text-sm text-slate-600">{{ a.updated_at | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <div class="flex gap-1 justify-end">
+            @if (a.status === 'published') {
+              <a [href]="'/articoli/' + a.slug" target="_blank"
+                 pButton icon="pi pi-eye" class="p-button-text" pTooltip="Apri articolo"></a>
+            }
+            <a pButton icon="pi pi-pencil" class="p-button-text"
+               [routerLink]="['/app/articoli', a.id, 'modifica']" pTooltip="Modifica"></a>
+            <button pButton icon="pi pi-trash" class="p-button-text p-button-danger"
+                    (click)="askDelete(a, $event)" pTooltip="Elimina"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr><td colspan="5" class="text-center py-8 text-slate-500">Nessun articolo. Creane uno nuovo.</td></tr>
+    </ng-template>
+  </p-table>
+
+  <p-confirmDialog></p-confirmDialog>
+</div>

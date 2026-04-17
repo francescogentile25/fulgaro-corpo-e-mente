@@ -1,0 +1,78 @@
+<div class="p-4 md:p-6 max-w-5xl mx-auto">
+  <header class="flex items-center justify-between mb-5 flex-wrap gap-3">
+    <div class="flex items-center gap-3">
+      <a pButton routerLink="/app/articoli" icon="pi pi-arrow-left" class="p-button-text"></a>
+      <h1 class="text-2xl font-bold m-0">{{ isEdit() ? 'Modifica articolo' : 'Nuovo articolo' }}</h1>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <p-toggleSwitch [ngModel]="publish()" (ngModelChange)="publish.set($event)"></p-toggleSwitch>
+        <span class="text-sm">{{ publish() ? 'Pubblicato' : 'Bozza' }}</span>
+      </div>
+      <button pButton label="Salva" icon="pi pi-save" [disabled]="!canSave()" (click)="save()"></button>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="text-center py-10 text-slate-500">
+      <i class="pi pi-spin pi-spinner text-3xl"></i>
+      <p class="mt-2">Caricamento…</p>
+    </div>
+  } @else {
+    <div class="grid gap-5">
+      <!-- Titolo -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Titolo</label>
+        <input pInputText class="w-full" placeholder="Il titolo dell'articolo"
+               [ngModel]="title()" (ngModelChange)="onTitleChange($event)" />
+      </div>
+
+      <!-- Slug -->
+      <div>
+        <label class="block text-sm font-medium mb-1">
+          Slug (URL)
+          <span class="text-xs text-slate-500 font-normal">— /articoli/{{ slug() || 'esempio-slug' }}</span>
+        </label>
+        <input pInputText class="w-full"
+               [ngModel]="slug()" (ngModelChange)="onSlugChange($event)" />
+      </div>
+
+      <!-- Excerpt -->
+      <div>
+        <label class="block text-sm font-medium mb-1">
+          Riassunto <span class="text-xs text-slate-500 font-normal">(opzionale, mostrato nelle card)</span>
+        </label>
+        <textarea pTextarea class="w-full" rows="2"
+                  [ngModel]="excerpt()" (ngModelChange)="excerpt.set($event)"></textarea>
+      </div>
+
+      <!-- Cover -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Immagine di copertina</label>
+        @if (coverImage()) {
+          <div class="relative inline-block">
+            <img [src]="coverImage()!" alt="" class="rounded-lg max-h-52 border" />
+            <button pButton icon="pi pi-times" class="p-button-rounded p-button-danger p-button-sm absolute top-2 right-2"
+                    (click)="removeCover()" pTooltip="Rimuovi"></button>
+          </div>
+        } @else {
+          <label class="inline-flex items-center gap-2 px-4 py-2 border border-dashed rounded-lg cursor-pointer hover:bg-slate-50">
+            <i class="pi pi-upload"></i>
+            <span>Carica copertina</span>
+            <input type="file" accept="image/*" hidden (change)="onCoverChange($event)" />
+          </label>
+        }
+      </div>
+
+      <!-- Editor -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Contenuto</label>
+        <app-tiptap-editor
+          [initialContent]="initialContent()"
+          (contentChange)="onContentChange($event)">
+        </app-tiptap-editor>
+      </div>
+    </div>
+  }
+</div>

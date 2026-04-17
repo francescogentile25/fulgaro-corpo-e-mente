@@ -1,0 +1,259 @@
+<div class="tt-toolbar" (click)="stop($event)">
+  <!-- Font family -->
+  <div class="tt-group">
+    <div class="tt-menu-wrap">
+      <button type="button" class="tt-btn tt-dropdown" (click)="toggleMenu('font', $event)" pTooltip="Tipo di carattere">
+        <span class="tt-dd-label">{{ currentFontFamilyLabel() }}</span>
+        <i class="pi pi-chevron-down tt-dd-chev"></i>
+      </button>
+      @if (openMenu() === 'font') {
+        <div class="tt-menu tt-font-menu" (click)="stop($event)">
+          @for (f of fontFamilies; track f.label) {
+            <button type="button"
+                    class="tt-menu-item"
+                    [class.is-selected]="currentFontFamily() === f.value"
+                    [style.fontFamily]="f.value || 'inherit'"
+                    (click)="setFontFamily(f.value)">
+              {{ f.label }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="tt-menu-wrap">
+      <button type="button" class="tt-btn tt-dropdown tt-dropdown--sm" (click)="toggleMenu('size', $event)" pTooltip="Dimensione">
+        <span class="tt-dd-label">{{ currentFontSizeLabel() }}</span>
+        <i class="pi pi-chevron-down tt-dd-chev"></i>
+      </button>
+      @if (openMenu() === 'size') {
+        <div class="tt-menu tt-size-menu" (click)="stop($event)">
+          @for (s of fontSizes; track s.label) {
+            <button type="button"
+                    class="tt-menu-item"
+                    [class.is-selected]="currentFontSize() === s.value"
+                    (click)="setFontSize(s.value)">
+              {{ s.label }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Marks -->
+  <div class="tt-group">
+    <button type="button" class="tt-btn" [class.is-active]="isActive('bold')"        (click)="bold()"      pTooltip="Grassetto"><i class="pi pi-bold"></i></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('italic')"      (click)="italic()"    pTooltip="Corsivo"><i class="pi pi-italic"></i></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('underline')"   (click)="underline()" pTooltip="Sottolineato"><span class="tt-u">U</span></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('strike')"      (click)="strike()"    pTooltip="Barrato"><span class="tt-s">S</span></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('subscript')"   (click)="subscript()"   pTooltip="Pedice">X₂</button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('superscript')" (click)="superscript()" pTooltip="Apice">X²</button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('code')"        (click)="code()"      pTooltip="Codice inline"><i class="pi pi-code"></i></button>
+  </div>
+
+  <!-- Color + Highlight -->
+  <div class="tt-group">
+    <div class="tt-menu-wrap">
+      <button type="button" class="tt-btn tt-color-btn"
+              [class.is-active]="!!currentColor()"
+              (click)="toggleMenu('color', $event)"
+              pTooltip="Colore testo">
+        <span class="tt-letter" [style.color]="currentColor() || '#334155'">A</span>
+        <span class="tt-color-swatch" [style.background]="currentColor() || '#e8e8e8'"></span>
+      </button>
+      @if (openMenu() === 'color') {
+        <div class="tt-menu tt-color-menu" (click)="stop($event)">
+          <div class="tt-menu-title">Colore testo</div>
+          <div class="tt-swatches">
+            @for (c of swatches; track c) {
+              <button type="button"
+                      class="tt-swatch"
+                      [style.background]="c"
+                      [class.is-selected]="currentColor() === c"
+                      (click)="setColor(c)"
+                      [attr.aria-label]="c"></button>
+            }
+          </div>
+          <div class="tt-menu-row">
+            <label class="tt-custom-color">
+              <span>Personalizzato</span>
+              <input type="color" [value]="currentColor() || '#ff8a95'"
+                     (input)="setColor($any($event.target).value)" />
+            </label>
+            <button type="button" class="tt-link-btn" (click)="unsetColor()">Rimuovi</button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="tt-menu-wrap">
+      <button type="button" class="tt-btn tt-color-btn"
+              [class.is-active]="!!currentHighlight()"
+              (click)="toggleMenu('highlight', $event)"
+              pTooltip="Evidenziazione">
+        <i class="pi pi-pencil" [style.color]="currentHighlight() || '#334155'"></i>
+        <span class="tt-color-swatch" [style.background]="currentHighlight() || '#fef08a'"></span>
+      </button>
+      @if (openMenu() === 'highlight') {
+        <div class="tt-menu tt-color-menu" (click)="stop($event)">
+          <div class="tt-menu-title">Evidenzia</div>
+          <div class="tt-swatches tt-swatches--sm">
+            @for (c of highlightSwatches; track c) {
+              <button type="button"
+                      class="tt-swatch"
+                      [style.background]="c"
+                      [class.is-selected]="currentHighlight() === c"
+                      (click)="setHighlight(c)"
+                      [attr.aria-label]="c"></button>
+            }
+          </div>
+          <div class="tt-menu-row">
+            <label class="tt-custom-color">
+              <span>Personalizzato</span>
+              <input type="color" [value]="currentHighlight() || '#fef08a'"
+                     (input)="setHighlight($any($event.target).value)" />
+            </label>
+            <button type="button" class="tt-link-btn" (click)="unsetHighlight()">Rimuovi</button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Headings -->
+  <div class="tt-group">
+    <button type="button" class="tt-btn" [class.is-active]="isActive('heading', { level: 1 })" (click)="h1()">H1</button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('heading', { level: 2 })" (click)="h2()">H2</button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('heading', { level: 3 })" (click)="h3()">H3</button>
+  </div>
+
+  <!-- Lists + blocks -->
+  <div class="tt-group">
+    <button type="button" class="tt-btn" [class.is-active]="isActive('bulletList')"  (click)="bullet()"   pTooltip="Elenco puntato"><i class="pi pi-list"></i></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('orderedList')" (click)="ordered()"  pTooltip="Elenco numerato">1.</button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('taskList')"    (click)="taskList()" pTooltip="Lista di controllo"><i class="pi pi-check-square"></i></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('blockquote')"  (click)="quote()"    pTooltip="Citazione">"</button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive('codeBlock')"   (click)="codeBlock()" pTooltip="Blocco di codice">&#60;/&#62;</button>
+    <button type="button" class="tt-btn" (click)="hr()" pTooltip="Separatore">—</button>
+  </div>
+
+  <!-- Alignment -->
+  <div class="tt-group">
+    <button type="button" class="tt-btn" [class.is-active]="isActive({ textAlign: 'left' })"    (click)="alignLeft()"    pTooltip="Allinea a sinistra"><i class="pi pi-align-left"></i></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive({ textAlign: 'center' })"  (click)="alignCenter()"  pTooltip="Centra"><i class="pi pi-align-center"></i></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive({ textAlign: 'right' })"   (click)="alignRight()"   pTooltip="Allinea a destra"><i class="pi pi-align-right"></i></button>
+    <button type="button" class="tt-btn" [class.is-active]="isActive({ textAlign: 'justify' })" (click)="alignJustify()" pTooltip="Giustifica"><i class="pi pi-align-justify"></i></button>
+  </div>
+
+  <!-- Link / Image / Table -->
+  <div class="tt-group">
+    <button type="button" class="tt-btn" [class.is-active]="isActive('link')" (click)="setLink()" pTooltip="Link"><i class="pi pi-link"></i></button>
+
+    <label class="tt-btn" pTooltip="Inserisci immagine">
+      <i class="pi pi-image"></i>
+      <input type="file" accept="image/*" hidden (change)="onImageInput($event)" />
+    </label>
+
+    <div class="tt-menu-wrap">
+      <button type="button" class="tt-btn"
+              [class.is-active]="imageSelected()"
+              [disabled]="!imageSelected()"
+              (click)="toggleMenu('image', $event)"
+              pTooltip="Opzioni immagine selezionata">
+        <i class="pi pi-arrows-alt"></i>
+      </button>
+
+      @if (openMenu() === 'image' && imageSelected()) {
+        <div class="tt-menu tt-image-menu" (click)="stop($event)">
+          <div class="tt-menu-title">Disposizione</div>
+          <div class="tt-float-row">
+            <button type="button" class="tt-float-btn" (click)="setImageFloat(null)" pTooltip="In linea con il testo">
+              <i class="pi pi-align-justify"></i> In linea
+            </button>
+            <button type="button" class="tt-float-btn" (click)="setImageFloat('left')" pTooltip="Testo a destra">
+              <i class="pi pi-arrow-left"></i> Wrap sx
+            </button>
+            <button type="button" class="tt-float-btn" (click)="setImageFloat('right')" pTooltip="Testo a sinistra">
+              Wrap dx <i class="pi pi-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="tt-menu-title">Dimensione</div>
+          <div class="tt-width-grid">
+            @for (p of widthPresets; track p.label) {
+              <button type="button" class="tt-width-btn" (click)="setImageWidth(p.value)">
+                {{ p.label }}
+              </button>
+            }
+          </div>
+
+          <button type="button" class="tt-link-btn tt-danger" (click)="removeImage()">
+            <i class="pi pi-trash"></i> Rimuovi immagine
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="tt-menu-wrap">
+      <button type="button" class="tt-btn"
+              [class.is-active]="tableActive()"
+              (click)="toggleMenu('table', $event)"
+              pTooltip="Tabella">
+        <i class="pi pi-table"></i>
+      </button>
+
+      @if (openMenu() === 'table') {
+        <div class="tt-menu tt-table-menu" (click)="stop($event)">
+          @if (!tableActive()) {
+            <button type="button" class="tt-menu-item" (click)="insertTable()">
+              <i class="pi pi-plus"></i> Inserisci tabella 3×3
+            </button>
+          } @else {
+            <div class="tt-menu-title">Righe</div>
+            <div class="tt-row">
+              <button type="button" class="tt-mini" (click)="addRowBefore()">↑ Sopra</button>
+              <button type="button" class="tt-mini" (click)="addRowAfter()">↓ Sotto</button>
+              <button type="button" class="tt-mini tt-mini--danger" (click)="deleteRow()"><i class="pi pi-trash"></i></button>
+            </div>
+
+            <div class="tt-menu-title">Colonne</div>
+            <div class="tt-row">
+              <button type="button" class="tt-mini" (click)="addColumnBefore()">← Prima</button>
+              <button type="button" class="tt-mini" (click)="addColumnAfter()">Dopo →</button>
+              <button type="button" class="tt-mini tt-mini--danger" (click)="deleteColumn()"><i class="pi pi-trash"></i></button>
+            </div>
+
+            <div class="tt-menu-title">Celle</div>
+            <div class="tt-row">
+              <button type="button" class="tt-mini" (click)="mergeCells()">Unisci</button>
+              <button type="button" class="tt-mini" (click)="splitCell()">Dividi</button>
+              <button type="button" class="tt-mini" (click)="toggleHeaderRow()">Header</button>
+            </div>
+
+            <button type="button" class="tt-link-btn tt-danger" (click)="deleteTable()">
+              <i class="pi pi-trash"></i> Elimina tabella
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- History / clear -->
+  <div class="tt-group tt-group--right">
+    <button type="button" class="tt-btn" (click)="clearFormat()" pTooltip="Cancella formattazione"><i class="pi pi-eraser"></i></button>
+    <button type="button" class="tt-btn" (click)="undo()" pTooltip="Annulla"><i class="pi pi-undo"></i></button>
+    <button type="button" class="tt-btn" (click)="redo()" pTooltip="Ripeti"><i class="pi pi-refresh"></i></button>
+  </div>
+
+  @if (uploading()) {
+    <span class="tt-uploading"><i class="pi pi-spin pi-spinner"></i> Caricamento…</span>
+  }
+</div>
+
+<div #host class="tt-host"></div>
+
+<p class="tt-hint">
+  Suggerimento: trascina o incolla immagini nell'editor. Selezionando un'immagine puoi ridimensionarla e disporla con testo a fianco (wrap sx/dx).
+</p>
