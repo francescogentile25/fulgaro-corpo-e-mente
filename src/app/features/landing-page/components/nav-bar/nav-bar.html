@@ -1,21 +1,27 @@
 <header
   class="nav-bar fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-  [class.scrolled]="isScrolled()"
+  [class.scrolled]="isScrolled() || !isHome()"
 >
   <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 lg:h-20">
-    <a class="logo font-lexend font-black text-lp-lime text-xl lg:text-2xl tracking-widest uppercase cursor-pointer select-none">
+    <a [routerLink]="'/'" class="logo font-lexend font-black text-lp-lime text-xl lg:text-2xl tracking-widest uppercase cursor-pointer select-none">
       FULGARO<span class="text-lp-text block text-[0.55em] tracking-[0.3em] font-medium -mt-0.5">Corpo e Mente</span>
     </a>
 
     <nav class="hidden lg:flex items-center gap-10">
-      @for (link of navLinks; track link.anchor) {
+      @for (link of navLinks; track link.fragment) {
         <button
           class="nav-link font-space text-xs uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200"
-          (click)="scrollTo(link.anchor)"
+          (click)="goToSection(link.fragment)"
         >
           {{ link.label }}
         </button>
       }
+      <a
+        [routerLink]="articlesUrl"
+        class="nav-link font-space text-xs uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200"
+      >
+        Blog
+      </a>
     </nav>
 
     <div class="hidden lg:flex items-center gap-3">
@@ -27,7 +33,7 @@
       </a>
       <button
         class="cta-btn font-lexend font-semibold text-xs uppercase tracking-widest px-6 py-3 bg-lp-lime text-white transition-transform duration-200 hover:scale-105"
-        (click)="scrollTo('#cta')"
+        (click)="goToSection('cta')"
       >
         Inizia Ora
       </button>
@@ -56,17 +62,24 @@
     </span>
   </ng-template>
   <nav class="flex flex-col gap-6 pt-8">
-    @for (link of navLinks; track link.anchor) {
+    @for (link of navLinks; track link.fragment) {
       <button
         class="text-left font-space text-sm uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200 py-2 border-b border-white/5"
-        (click)="scrollTo(link.anchor)"
+        (click)="goToSection(link.fragment)"
       >
         {{ link.label }}
       </button>
     }
+    <a
+      [routerLink]="articlesUrl"
+      class="text-left font-space text-sm uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200 py-2 border-b border-white/5"
+      (click)="mobileMenuOpen.set(false)"
+    >
+      Blog
+    </a>
     <button
       class="mt-4 font-lexend font-semibold text-xs uppercase tracking-widest px-6 py-4 bg-lp-lime text-white hover:scale-105 transition-transform duration-200"
-      (click)="scrollTo('#cta')"
+      (click)="goToSection('cta')"
     >
       Inizia Ora
     </button>

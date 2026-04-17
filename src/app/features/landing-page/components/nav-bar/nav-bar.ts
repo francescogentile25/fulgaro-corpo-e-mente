@@ -1,11 +1,15 @@
 import {
   afterNextRender,
   Component,
+  computed,
   HostListener,
+  inject,
   OnDestroy,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter, map, startWith } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { globalPaths } from '../../../_config/global-paths.config';
@@ -17,16 +21,32 @@ import { globalPaths } from '../../../_config/global-paths.config';
   styleUrl: './nav-bar.scss',
 })
 export class NavBar implements OnDestroy {
+  private router = inject(Router);
+
   protected readonly isScrolled = signal(false);
   protected readonly mobileMenuOpen = signal(false);
 
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map((e) => e.urlAfterRedirects),
+      startWith(this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+  protected readonly isHome = computed(() => {
+    const url = this.currentUrl();
+    return url === '/' || url.startsWith('/#') || url.startsWith('/?');
+  });
+
   readonly loginUrl = globalPaths.loginUrl;
+  readonly articlesUrl = globalPaths.articlesPublicUrl;
 
   protected readonly navLinks = [
-    { label: 'Filosofia', anchor: '#filosofia' },
-    { label: 'Programmi', anchor: '#programmi' },
-    { label: 'Dove Alleno', anchor: '#dove-alleno' },
-    { label: 'Contatti', anchor: '#cta' },
+    { label: 'Filosofia', fragment: 'filosofia' },
+    { label: 'Programmi', fragment: 'programmi' },
+    { label: 'Dove Alleno', fragment: 'dove-alleno' },
+    { label: 'Contatti', fragment: 'cta' },
   ];
 
   constructor() {
@@ -40,10 +60,14 @@ export class NavBar implements OnDestroy {
     this.isScrolled.set(window.scrollY > 60);
   }
 
-  scrollTo(anchor: string): void {
+  goToSection(fragment: string): void {
     this.mobileMenuOpen.set(false);
-    const el = document.querySelector(anchor);
-    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (this.isHome()) {
+      const el = document.getElementById(fragment);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      this.router.navigate(['/'], { fragment });
+    }
   }
 
   ngOnDestroy(): void {}
