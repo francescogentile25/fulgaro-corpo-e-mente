@@ -160,6 +160,8 @@ export class Dashboard implements OnInit {
 
   readonly donutOptions = {
     ...BASE_CHART_OPTIONS,
+    maintainAspectRatio: true,
+    aspectRatio: 1.3,
     cutout: '65%',
   };
 

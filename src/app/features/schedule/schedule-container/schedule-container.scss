@@ -16,10 +16,11 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background: #ffffff;
-  border-right: 1px solid #e2e8f0;
+  background: var(--app-surface);
+  border-right: 1px solid var(--app-border);
   flex-shrink: 0;
   overflow: hidden;
+  transition: background 0.2s, border-color 0.2s;
 
   @media (min-width: 1024px) {
     width: 300px;
@@ -29,7 +30,6 @@
     width: 340px;
   }
 
-  // Su mobile: nascondi il pannello quando un atleta è selezionato
   &--hidden {
     display: none;
 
@@ -41,8 +41,9 @@
 
 .aside-header {
   padding: 1rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--app-border);
   flex-shrink: 0;
+  transition: border-color 0.2s;
 }
 
 .aside-list {
@@ -53,10 +54,11 @@
 
 .aside-footer {
   padding: 0.5rem 1rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--app-border);
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--app-text-muted);
   flex-shrink: 0;
+  transition: border-color 0.2s, color 0.2s;
 }
 
 // ── Voci lista atleti ─────────────────────────────────────────────────
@@ -67,23 +69,23 @@
   gap: 0.75rem;
   width: 100%;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--app-border);
   border-left: 3px solid transparent;
   cursor: pointer;
   transition: background-color 0.15s, border-left-color 0.15s;
-  background: #ffffff;
+  background: var(--app-surface);
   text-align: left;
 
   &:hover {
-    background-color: #f8fafc;
+    background-color: var(--app-hover);
   }
 
   &--selected {
-    background-color: #eff6ff;
-    border-left-color: #3b82f6;
+    background-color: var(--app-selected-bg);
+    border-left-color: var(--app-selected-border);
 
     &:hover {
-      background-color: #dbeafe;
+      background-color: var(--app-selected-hover);
     }
   }
 }
@@ -93,9 +95,10 @@
   margin-top: 0.125rem;
   padding: 0.125rem 0.5rem;
   font-size: 0.6875rem;
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--app-badge-bg);
+  color: var(--app-badge-text);
   border-radius: 9999px;
+  transition: background 0.2s, color 0.2s;
 }
 
 .inactive-badge {
@@ -110,6 +113,11 @@
   white-space: nowrap;
 }
 
+.dark .inactive-badge {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
 // ── Area schedule (pannello destro) ───────────────────────────────────
 
 .schedule-main {
@@ -117,10 +125,10 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  background: #f8fafc;
+  background: var(--app-page-bg);
   min-width: 0;
+  transition: background 0.2s;
 
-  // Su mobile: nascondi l'area quando nessun atleta è selezionato
   &--empty {
     display: none;
 

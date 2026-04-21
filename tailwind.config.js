@@ -4,20 +4,23 @@ module.exports = {
   content: [
     "./src/**/*.{html,ts}",
   ],
+  darkMode: ['selector', '.dark'],
   theme: {
     extend: {
       colors: {
-        'blumelli': 'var(--blumelli)',
-        'lp-bg':     '#0e0e0e',
-        'lp-bg-low': '#131313',
-        'lp-bg-mid': '#1a1a1a',
-        'lp-bg-high':'#20201f',
-        'lp-bg-bright':'#2c2c2c',
-        'lp-lime':   '#ff8a95',
-        'lp-lime-c': '#ff2b40',
-        'lp-yellow': '#ff2b40',
-        'lp-text':   '#e8e8e8',
-        'lp-muted':  '#adaaaa',
+        'blumelli':            'var(--blumelli)',
+        'lp-bg':               'var(--lp-bg)',
+        'lp-bg-low':           'var(--lp-bg-low)',
+        'lp-bg-mid':           'var(--lp-bg-mid)',
+        'lp-bg-high':          'var(--lp-bg-high)',
+        'lp-bg-bright':        'var(--lp-bg-bright)',
+        'lp-lime':             '#ff8a95',
+        'lp-lime-c':           '#ff2b40',
+        'lp-yellow':           '#ff2b40',
+        'lp-text':             'var(--lp-text)',
+        'lp-muted':            'var(--lp-muted)',
+        'lp-divider':          'var(--lp-divider)',
+        'lp-divider-strong':   'var(--lp-divider-strong)',
       },
       fontFamily: {
         'lexend': ['Lexend', 'sans-serif'],
@@ -29,4 +32,3 @@ module.exports = {
     PrimeUI
   ],
 }
-

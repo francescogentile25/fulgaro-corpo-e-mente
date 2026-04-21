@@ -10,12 +10,15 @@
 
 .philosophy-badge {
   border-top: 2px solid #ff8a95;
+  box-shadow: var(--lp-card-shadow-hover);
 }
 
 .philosophy-pillar {
-  transition: background-color 0.2s ease;
+  box-shadow: var(--lp-card-shadow);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    background-color: #20201f;
+    background-color: var(--lp-bg-high);
+    box-shadow: var(--lp-card-shadow-hover);
   }
 }

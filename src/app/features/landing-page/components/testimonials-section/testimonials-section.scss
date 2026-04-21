@@ -6,6 +6,8 @@
 
 .testimonial-card {
   position: relative;
+  box-shadow: var(--lp-card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
   &::after {
     content: '';
@@ -20,7 +22,8 @@
 
   &:hover,
   &--active {
-    background-color: #262626;
+    background-color: var(--lp-bg-bright);
+    box-shadow: var(--lp-card-shadow-hover);
 
     &::after {
       background: #ff8a95;

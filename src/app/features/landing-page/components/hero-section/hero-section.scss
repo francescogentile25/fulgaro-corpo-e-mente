@@ -1,5 +1,6 @@
 .hero-section {
-  background-color: #0e0e0e;
+  background-color: var(--lp-bg);
+  transition: background-color 0.25s;
 }
 
 .hero-bg-image {
@@ -10,9 +11,9 @@
 .hero-bg-overlay {
   background: linear-gradient(
     to top,
-    #0e0e0e 0%,
-    rgba(14, 14, 14, 0.75) 40%,
-    rgba(14, 14, 14, 0.45) 100%
+    var(--lp-bg) 0%,
+    var(--lp-overlay) 40%,
+    transparent 100%
   );
   opacity: 0.3;
 }

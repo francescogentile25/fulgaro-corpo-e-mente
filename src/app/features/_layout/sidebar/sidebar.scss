@@ -27,10 +27,11 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #ffffff;
-  border-right: 1px solid #e2e8f0;
+  background: var(--app-surface);
+  border-right: 1px solid var(--app-border);
   padding: 1rem;
   overflow: hidden;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 // ── Logo ────────────────────────────────────────────────
@@ -58,15 +59,17 @@
     .logo-title {
       font-size: 1rem;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--app-text);
       margin: 0;
       line-height: 1.2;
+      transition: color 0.2s;
     }
     .logo-subtitle {
       font-size: 0.7rem;
-      color: #94a3b8;
+      color: var(--app-text-muted);
       margin: 0;
       letter-spacing: 0.01em;
+      transition: color 0.2s;
     }
   }
 }
@@ -89,7 +92,7 @@
   padding: 0.6rem 0.875rem;
   border-radius: 8px;
   text-decoration: none;
-  color: #475569;
+  color: var(--app-text-muted);
   font-size: 0.875rem;
   font-weight: 500;
   transition: background 0.15s, color 0.15s;
@@ -104,8 +107,8 @@
   }
 
   &:hover:not(&--disabled) {
-    background: #f1f5f9;
-    color: #1e293b;
+    background: var(--app-hover);
+    color: var(--app-text);
   }
 
   &--active {
@@ -119,16 +122,31 @@
     opacity: 0.45;
     cursor: default;
   }
+
+  &--landing {
+    margin-bottom: 0.25rem;
+    color: var(--app-text-muted);
+    border: 1px dashed var(--app-border);
+
+    i { opacity: 0.8; }
+
+    &:hover {
+      background: var(--app-hover);
+      color: var(--app-text);
+      border-style: solid;
+    }
+  }
 }
 
 .nav-badge {
   margin-left: auto;
   font-size: 0.625rem;
   font-weight: 600;
-  color: #94a3b8;
-  background: #f1f5f9;
+  color: var(--app-badge-text);
+  background: var(--app-badge-bg);
   padding: 1px 6px;
   border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
 }
 
 // ── Footer ───────────────────────────────────────────────
@@ -153,12 +171,17 @@
     .user-name {
       font-size: 0.8125rem;
       font-weight: 600;
-      color: #1e293b;
+      color: var(--app-text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      transition: color 0.2s;
     }
-    .user-role { font-size: 0.7rem; color: #94a3b8; }
+    .user-role {
+      font-size: 0.7rem;
+      color: var(--app-text-muted);
+      transition: color 0.2s;
+    }
   }
 
   ::ng-deep .user-avatar {

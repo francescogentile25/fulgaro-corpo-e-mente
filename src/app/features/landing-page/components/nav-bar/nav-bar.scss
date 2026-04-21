@@ -1,8 +1,25 @@
 .nav-bar {
   background: transparent;
 
+  // Stato trasparente (sopra l'hero): i link devono restare leggibili
+  // sopra l'immagine di sfondo in qualunque theme.
+  &:not(.scrolled) {
+    .logo,
+    .nav-link {
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
+    }
+
+    .nav-link {
+      color: #ffffff;
+
+      &:hover {
+        color: #c8ff3d;
+      }
+    }
+  }
+
   &.scrolled {
-    background: rgba(14, 14, 14, 0.85);
+    background: var(--lp-overlay);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 4px 40px rgba(255, 43, 64, 0.04);
@@ -15,6 +32,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
 
   &::after {
     content: '';
@@ -39,17 +57,17 @@
 }
 
 ::ng-deep .mobile-drawer {
-  background: #131313 !important;
+  background: var(--lp-bg-low) !important;
   border-left: none !important;
 
   .p-drawer-header {
-    background: #131313;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--lp-bg-low);
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
     padding: 1.5rem;
   }
 
   .p-drawer-content {
-    background: #131313;
+    background: var(--lp-bg-low);
     padding: 1.5rem;
   }
 }

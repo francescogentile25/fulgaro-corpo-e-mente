@@ -36,6 +36,18 @@
       ></button>
     </p-overlay-badge>
 
+    <!-- Toggle tema -->
+    <p-button
+      severity="secondary"
+      variant="text"
+      [icon]="themeService.isDark() ? 'pi pi-sun' : 'pi pi-moon'"
+      size="small"
+      styleClass="header-btn"
+      [pTooltip]="themeService.isDark() ? 'Tema chiaro' : 'Tema scuro'"
+      tooltipPosition="bottom"
+      (click)="themeService.toggle()"
+    />
+
     <span class="header-separator"></span>
 
     <!-- Info utente -->

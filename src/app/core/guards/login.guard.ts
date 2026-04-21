@@ -16,6 +16,11 @@ export const loginGuard: CanActivateFn = (route, state) => {
     take(1),
     map(() => {
       if (authStore.isAuthenticated()) {
+        // Se la navigazione richiede un fragment (es. link "Programmi" dalla navbar),
+        // lascia passare così l'utente loggato può tornare alle sezioni della landing.
+        if (state.url.includes('#')) {
+          return true;
+        }
         return router.createUrlTree([globalPaths.dashboardUrl]);
       }
 

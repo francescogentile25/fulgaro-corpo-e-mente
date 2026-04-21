@@ -154,7 +154,7 @@
       <!-- Donut: stato pagamenti -->
       <p-card styleClass="border border-slate-200" header="Stato pagamenti">
         @if (adminDonutData()) {
-          <div style="height: 240px;" class="flex items-center justify-center">
+          <div class="flex items-center justify-center mx-auto" style="max-width: 320px;">
             <p-chart type="doughnut" [data]="adminDonutData()" [options]="donutOptions" />
           </div>
         } @else {
@@ -315,7 +315,7 @@
       <!-- Donut: distribuzione tipi allenamento -->
       <p-card styleClass="border border-slate-200" header="Tipi di allenamento">
         @if (atletaDonutData()) {
-          <div style="height: 240px;" class="flex items-center justify-center">
+          <div class="flex items-center justify-center mx-auto" style="max-width: 320px;">
             <p-chart type="doughnut" [data]="atletaDonutData()" [options]="donutOptions" />
           </div>
         } @else {

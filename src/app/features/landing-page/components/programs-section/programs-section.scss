@@ -6,12 +6,14 @@
 
 // ── Card ──
 .program-card {
-  background: #20201f;
+  background: var(--lp-bg-high);
   min-height: 600px;
-  transition: background-color 0.3s ease;
+  box-shadow: var(--lp-card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    background: #262626;
+    background: var(--lp-bg-bright);
+    box-shadow: var(--lp-card-shadow-hover);
   }
 }
 
@@ -22,11 +24,11 @@
 }
 
 .icon-box {
-  background: rgba(255, 138, 149, 0.08);
+  background: rgba(255, 138, 149, 0.12);
 }
 
 .ideal-for {
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--lp-divider-strong);
   border-left: 2px solid #ff2b40;
 }
 

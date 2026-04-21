@@ -25,6 +25,14 @@
     </nav>
 
     <div class="hidden lg:flex items-center gap-3">
+      <!-- Toggle tema -->
+      <button
+        class="w-9 h-9 flex items-center justify-center text-lp-muted hover:text-lp-lime transition-colors duration-200"
+        [attr.aria-label]="themeService.isDark() ? 'Passa a tema chiaro' : 'Passa a tema scuro'"
+        (click)="themeService.toggle()"
+      >
+        <i [class]="themeService.isDark() ? 'pi pi-sun text-base' : 'pi pi-moon text-base'"></i>
+      </button>
       <a
         [routerLink]="loginUrl"
         class="font-lexend font-semibold text-xs uppercase tracking-widest px-5 py-3 border border-lp-lime/40 text-lp-lime hover:bg-lp-lime/10 transition-colors duration-200"
@@ -64,7 +72,7 @@
   <nav class="flex flex-col gap-6 pt-8">
     @for (link of navLinks; track link.fragment) {
       <button
-        class="text-left font-space text-sm uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200 py-2 border-b border-white/5"
+        class="text-left font-space text-sm uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200 py-2 border-b border-lp-divider"
         (click)="goToSection(link.fragment)"
       >
         {{ link.label }}
@@ -72,11 +80,19 @@
     }
     <a
       [routerLink]="articlesUrl"
-      class="text-left font-space text-sm uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200 py-2 border-b border-white/5"
+      class="text-left font-space text-sm uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200 py-2 border-b border-lp-divider"
       (click)="mobileMenuOpen.set(false)"
     >
       Blog
     </a>
+    <!-- Toggle tema mobile -->
+    <button
+      class="flex items-center gap-3 text-left font-space text-sm uppercase tracking-widest text-lp-muted hover:text-lp-lime transition-colors duration-200 py-2 border-b border-lp-divider"
+      (click)="themeService.toggle()"
+    >
+      <i [class]="themeService.isDark() ? 'pi pi-sun' : 'pi pi-moon'"></i>
+      {{ themeService.isDark() ? 'Tema chiaro' : 'Tema scuro' }}
+    </button>
     <button
       class="mt-4 font-lexend font-semibold text-xs uppercase tracking-widest px-6 py-4 bg-lp-lime text-white hover:scale-105 transition-transform duration-200"
       (click)="goToSection('cta')"

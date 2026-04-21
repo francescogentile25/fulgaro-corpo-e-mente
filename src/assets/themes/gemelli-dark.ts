@@ -6,22 +6,22 @@ export const GemelliDark = definePreset(GemelliLight, {
     colorScheme: {
       dark: {
         surface: {
-          0:   '#18191a',
-          50:  '#18191a',
-          100: '#1d1e20',
-          200: '#242526',
-          300: '#2b2c2e',
-          400: '#3a3b3c',
-          500: '#4b4c4d',
-          600: '#5c5d5e',
-          700: '#6d6e6f',
-          800: '#7e7f80',
-          900: '#8f9091',
-          950: '#a0a1a2'
+          0:   '#020617',   // slate-950 — sfondo pagina
+          50:  '#0f172a',   // slate-900
+          100: '#1e293b',   // slate-800 — card surface
+          200: '#334155',   // slate-700 — bordi, elevati
+          300: '#475569',   // slate-600
+          400: '#64748b',   // slate-500
+          500: '#94a3b8',   // slate-400
+          600: '#cbd5e1',   // slate-300
+          700: '#e2e8f0',   // slate-200
+          800: '#f1f5f9',   // slate-100
+          900: '#f8fafc',   // slate-50
+          950: '#ffffff'
         },
         content: {
-          color:     '#e4e6eb',
-          weakColor: '#b0b3b8'
+          color:     '#e2e8f0',
+          weakColor: '#94a3b8'
         },
         focusRing: {
           width: '2px',

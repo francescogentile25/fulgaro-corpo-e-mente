@@ -2,23 +2,23 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #0e0e0e;
+  background: var(--lp-bg);
 }
 
 .article-detail {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  background: #0e0e0e;
-  color: #e8e8e8;
+  background: var(--lp-bg);
+  color: var(--lp-text);
 
   .state {
     flex: 1;
     text-align: center;
     padding: 120px 20px;
-    color: #adaaaa;
+    color: var(--lp-muted);
 
-    h2 { color: #fff; margin-bottom: 12px; }
+    h2 { color: var(--lp-text); margin-bottom: 12px; }
     a { color: #ff8a95; text-decoration: underline; }
   }
 
@@ -26,14 +26,14 @@
     height: 420px;
     background-size: cover;
     background-position: center;
-    background-color: #20201f;
+    background-color: var(--lp-bg-high);
     position: relative;
 
     &::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(14, 14, 14, 0) 50%, #0e0e0e 100%);
+      background: linear-gradient(to bottom, transparent 50%, var(--lp-bg) 100%);
     }
   }
 
@@ -56,7 +56,7 @@
       line-height: 1.15;
       letter-spacing: -0.02em;
       margin: 18px 0 10px;
-      color: #fff;
+      color: var(--lp-text);
     }
 
     time {
@@ -71,16 +71,16 @@
   .body {
     font-size: 1.08rem;
     line-height: 1.75;
-    color: #e8e8e8;
+    color: var(--lp-text);
 
     ::ng-deep {
-      h1 { font-size: 2rem;    font-weight: 700; margin: 1.4em 0 .5em; color: #fff; }
-      h2 { font-size: 1.6rem;  font-weight: 700; margin: 1.3em 0 .5em; color: #fff; }
-      h3 { font-size: 1.3rem;  font-weight: 700; margin: 1.1em 0 .4em; color: #fff; }
+      h1 { font-size: 2rem;    font-weight: 700; margin: 1.4em 0 .5em; color: var(--lp-text); }
+      h2 { font-size: 1.6rem;  font-weight: 700; margin: 1.3em 0 .5em; color: var(--lp-text); }
+      h3 { font-size: 1.3rem;  font-weight: 700; margin: 1.1em 0 .4em; color: var(--lp-text); }
 
-      p { margin: .9em 0; color: #e8e8e8; }
+      p { margin: .9em 0; color: var(--lp-text); }
       p::after { content: ''; display: block; clear: both; }
-      strong { color: #fff; }
+      strong { color: var(--lp-text); }
       u { text-decoration: underline; }
 
       mark {
@@ -114,7 +114,7 @@
       blockquote {
         border-left: 3px solid #ff8a95;
         padding-left: 16px;
-        color: #adaaaa;
+        color: var(--lp-muted);
         margin: 1em 0;
         font-style: italic;
       }
@@ -124,7 +124,7 @@
       a { color: #ff8a95; text-decoration: underline; }
 
       code {
-        background: #1a1a1a;
+        background: var(--lp-bg-mid);
         color: #ff8a95;
         padding: 2px 6px;
         border-radius: 4px;
@@ -134,8 +134,8 @@
       }
 
       pre {
-        background: #1a1a1a;
-        color: #e2e8f0;
+        background: var(--lp-bg-mid);
+        color: var(--lp-text);
         padding: 14px 18px;
         border-radius: 10px;
         border: 1px solid rgba(255, 138, 149, 0.15);
@@ -182,11 +182,11 @@
         }
         th {
           background: rgba(255, 138, 149, 0.08);
-          color: #fff;
+          color: var(--lp-text);
           font-weight: 600;
           text-align: left;
         }
-        tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
+        tr:nth-child(even) td { background: var(--lp-bg-low); }
       }
     }
   }

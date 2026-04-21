@@ -26,7 +26,9 @@
       "mcp__9748148c-aa28-493b-ab07-7935a8e51815__restore_project",
       "mcp__9748148c-aa28-493b-ab07-7935a8e51815__get_project",
       "mcp__9748148c-aa28-493b-ab07-7935a8e51815__execute_sql",
-      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__apply_migration"
+      "mcp__9748148c-aa28-493b-ab07-7935a8e51815__apply_migration",
+      "Bash(find /c/Users/francesco.gentile/Desktop/SchedeDamiano -maxdepth 1 -name \"package.json\" -exec head -50 {} \\\\;)",
+      "Bash(xargs grep *)"
     ]
   }
 }

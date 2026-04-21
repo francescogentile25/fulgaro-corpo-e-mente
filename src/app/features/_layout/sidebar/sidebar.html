@@ -42,6 +42,16 @@
 
   <!-- Footer: utente + logout -->
   <div class="sidebar-footer">
+    <a
+      [routerLink]="'/'"
+      [fragment]="'top'"
+      class="nav-item nav-item--landing"
+      (click)="closeOnMobile()"
+    >
+      <i class="pi pi-external-link"></i>
+      <span>Torna al sito</span>
+    </a>
+
     <p-divider />
 
     <div class="user-info">

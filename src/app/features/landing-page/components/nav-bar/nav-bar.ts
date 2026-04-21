@@ -13,6 +13,7 @@ import { filter, map, startWith } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { globalPaths } from '../../../_config/global-paths.config';
+import { ThemeService } from '../../../../core/services/theme.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -22,6 +23,7 @@ import { globalPaths } from '../../../_config/global-paths.config';
 })
 export class NavBar implements OnDestroy {
   private router = inject(Router);
+  themeService = inject(ThemeService);
 
   protected readonly isScrolled = signal(false);
   protected readonly mobileMenuOpen = signal(false);

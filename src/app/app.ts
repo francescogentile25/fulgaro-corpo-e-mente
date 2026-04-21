@@ -5,6 +5,7 @@ import { PrimeNG } from "primeng/config";
 import { ConfirmDialog } from "primeng/confirmdialog";
 import { ConfirmationService } from "primeng/api";
 import { AuthStore } from "./features/auth/store/auth.store";
+import { ThemeService } from "./core/services/theme.service";
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { AuthStore } from "./features/auth/store/auth.store";
 export class App implements OnInit {
   private primeng = inject(PrimeNG);
   public authStore = inject(AuthStore);
+  private themeService = inject(ThemeService);
 
   ngOnInit() {
     this.primeng.setTranslation({
