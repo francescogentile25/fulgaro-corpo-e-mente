@@ -80,6 +80,12 @@ export const layoutRoutes: Routes = [
             canActivate: [authGuard],
             loadComponent: () => import('../payments/payments-page/payments-page').then(c => c.PaymentsPage),
           },
+          // Momenti di corsa (admin)
+          {
+            path: 'momenti-corsa',
+            canActivate: [adminGuard],
+            loadComponent: () => import('../race-moments/race-moments-admin-page/race-moments-admin-page').then(c => c.RaceMomentsAdminPage)
+          },
           // Articoli (admin)
           {
             path: 'articoli',

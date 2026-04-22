@@ -16,31 +16,33 @@
       </div>
     </div>
 
-    <div class="moments-grid grid grid-cols-2 lg:grid-cols-3 auto-rows-[200px] lg:auto-rows-[240px] gap-px">
-      @for (moment of moments; track moment.label; let i = $index) {
-        <div
-          class="moment-cell relative overflow-hidden cursor-pointer group"
-          [class]="'moment-cell ' + moment.span"
-        >
-          <img
-            [src]="moment.image"
-            [alt]="moment.label"
-            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+    @if (store.entities().length > 0) {
+      <div class="moments-grid grid grid-cols-2 lg:grid-cols-3 auto-rows-[200px] lg:auto-rows-[240px] gap-px">
+        @for (moment of store.entities(); track moment.id) {
+          <div
+            class="moment-cell relative overflow-hidden cursor-pointer group"
+            [class]="moment.span"
+          >
+            <img
+              [src]="moment.image_url"
+              [alt]="moment.label"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
 
-          <div class="moment-overlay absolute inset-0 transition-opacity duration-400"></div>
+            <div class="moment-overlay absolute inset-0 transition-opacity duration-400"></div>
 
-          <div class="absolute inset-0 flex flex-col justify-end p-5 lg:p-8">
-            <p class="font-space text-xs uppercase tracking-widest text-lp-lime mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {{ moment.label }}
-            </p>
-            <p class="font-lexend text-sm text-lp-text leading-snug opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 max-w-xs">
-              {{ moment.description }}
-            </p>
+            <div class="absolute inset-0 flex flex-col justify-end p-5 lg:p-8">
+              <p class="font-space text-xs uppercase tracking-widest text-lp-lime mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {{ moment.label }}
+              </p>
+              <p class="font-lexend text-sm text-lp-text leading-snug opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 max-w-xs">
+                {{ moment.description }}
+              </p>
+            </div>
           </div>
-        </div>
-      }
-    </div>
+        }
+      </div>
+    }
 
   </div>
 </section>

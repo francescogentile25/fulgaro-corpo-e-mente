@@ -1,0 +1,132 @@
+<div class="p-4 md:p-6">
+
+  <header class="flex items-center justify-between mb-4 flex-wrap gap-3">
+    <div>
+      <h1 class="text-2xl font-bold m-0">Momenti di Corsa</h1>
+      <p class="text-sm text-slate-500 m-0 mt-1">Gestisci le foto della sezione nella landing page</p>
+    </div>
+    <p-button icon="pi pi-plus" label="Aggiungi foto" (onClick)="openNew()" />
+  </header>
+
+  <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <p-table
+      [value]="store.entities()"
+      [loading]="store.loading()"
+      styleClass="p-datatable-sm"
+      dataKey="id">
+
+      <ng-template #header>
+        <tr>
+          <th style="width:5rem">Foto</th>
+          <th>Titolo</th>
+          <th>Descrizione</th>
+          <th style="width:11rem">Dimensione cella</th>
+          <th style="width:6rem" class="text-center">Ordine</th>
+          <th style="width:8rem"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-m>
+        <tr>
+          <td>
+            <img [src]="m.image_url" [alt]="m.label"
+                 class="w-14 h-14 object-cover rounded-lg" />
+          </td>
+          <td class="font-medium text-slate-800">{{ m.label }}</td>
+          <td class="text-sm text-slate-500">{{ m.description }}</td>
+          <td class="text-sm">{{ spanLabel(m.span) }}</td>
+          <td class="text-sm text-center text-slate-500">{{ m.order_index }}</td>
+          <td>
+            <div class="flex gap-1 justify-end">
+              <p-button icon="pi pi-pencil" severity="secondary" variant="text" size="small"
+                        pTooltip="Modifica" tooltipPosition="top" (onClick)="openEdit(m)" />
+              <p-button icon="pi pi-trash" severity="danger" variant="text" size="small"
+                        pTooltip="Elimina" tooltipPosition="top" (onClick)="askDelete(m)" />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #empty>
+        <tr>
+          <td colspan="6">
+            <div class="flex flex-col items-center justify-center py-12 text-slate-400">
+              <i class="pi pi-images text-4xl mb-3"></i>
+              <p class="font-medium">Nessuna foto caricata</p>
+              <p class="text-sm mt-1">Aggiungi la prima foto con il pulsante in alto a destra.</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </div>
+
+</div>
+
+<!-- ── Dialog Aggiungi / Modifica ─────────────────────── -->
+<p-dialog
+  [(visible)]="dialogVisible"
+  [header]="editingId() ? 'Modifica foto' : 'Nuova foto'"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '520px' }">
+
+  <div class="flex flex-col gap-4 py-2">
+
+    <!-- Preview + upload -->
+    <div class="flex flex-col items-center gap-3">
+      @if (previewUrl()) {
+        <img [src]="previewUrl()!" alt="preview"
+             class="w-full h-52 object-cover rounded-xl border border-slate-200" />
+      } @else {
+        <div class="w-full h-52 bg-slate-50 rounded-xl border border-slate-200 border-dashed
+                    flex flex-col items-center justify-center text-slate-400 gap-2">
+          <i class="pi pi-image text-4xl"></i>
+          <span class="text-sm">Nessuna immagine selezionata</span>
+        </div>
+      }
+      <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)" />
+      <p-button icon="pi pi-upload" label="Carica immagine" severity="secondary" size="small"
+                (onClick)="fileInput.click()" />
+    </div>
+
+    <!-- Titolo -->
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-medium text-slate-700">Titolo *</label>
+      <input pInputText [(ngModel)]="form.label"
+             placeholder="Es. Sprint finale" class="w-full" />
+    </div>
+
+    <!-- Descrizione -->
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-medium text-slate-700">Descrizione *</label>
+      <textarea pTextarea [(ngModel)]="form.description" [rows]="2" class="w-full resize-none"
+                placeholder="Es. Gli ultimi 400 metri dove tutto si decide"></textarea>
+    </div>
+
+    <!-- Dimensione + Ordine -->
+    <div class="flex gap-4">
+      <div class="flex flex-col gap-1.5 flex-1">
+        <label class="text-sm font-medium text-slate-700">Dimensione cella</label>
+        <p-select [(ngModel)]="form.span" [options]="spanOptions"
+                  optionLabel="label" optionValue="value" [fluid]="true" />
+      </div>
+      <div class="flex flex-col gap-1.5" style="width: 110px">
+        <label class="text-sm font-medium text-slate-700">Ordine</label>
+        <p-inputNumber [(ngModel)]="form.order_index" [min]="0"
+                       [showButtons]="true" [fluid]="true" />
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Annulla" severity="secondary" variant="text"
+              (onClick)="dialogVisible = false" />
+    <p-button label="Salva" icon="pi pi-check"
+              [disabled]="!isFormValid || uploading()"
+              [loading]="uploading()"
+              (onClick)="save()" />
+  </ng-template>
+</p-dialog>
