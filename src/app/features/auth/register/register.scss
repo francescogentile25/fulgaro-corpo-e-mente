@@ -73,7 +73,6 @@
     font-style: italic;
   }
 
-  // Diagonal lines decoration
   &__lines {
     position: absolute;
     inset: 0;
@@ -93,7 +92,6 @@
     }
   }
 
-  // Concentric circles (bottom-right)
   &__circles {
     position: absolute;
     bottom: -90px;
@@ -141,7 +139,7 @@
   }
 }
 
-// ─── Mobile logo header ───────────────────────────────────────────────────────
+// ─── Mobile logo ──────────────────────────────────────────────────────────────
 .login-mobile-logo {
   display: flex;
   align-items: center;
@@ -186,7 +184,7 @@
 // ─── Card ─────────────────────────────────────────────────────────────────────
 .login-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   background: var(--lp-bg-mid);
   border: 1px solid var(--lp-divider);
   border-top: 2px solid #ff2b40;
@@ -237,7 +235,7 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.1rem;
 }
 
 .login-field {
@@ -284,6 +282,34 @@
   }
 }
 
+// ─── Nome + Cognome grid ──────────────────────────────────────────────────────
+.reg-name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+// ─── Info note ────────────────────────────────────────────────────────────────
+.reg-info-note {
+  display: flex;
+  gap: 0.625rem;
+  align-items: flex-start;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 10px;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.8rem;
+  color: var(--lp-text);
+  line-height: 1.5;
+
+  &__icon {
+    color: #f59e0b;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+    font-size: 0.9rem;
+  }
+}
+
 // ─── Submit button ────────────────────────────────────────────────────────────
 .login-submit {
   display: flex;
@@ -292,7 +318,7 @@
   gap: 0.5rem;
   width: 100%;
   padding: 0.9rem 1.5rem;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   background: #ff2b40;
   color: #fff;
   font-family: 'Lexend', sans-serif;
@@ -304,10 +330,8 @@
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   letter-spacing: 0.01em;
 
-  svg {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
+  .pi {
+    font-size: 0.9rem;
     transition: transform 0.2s ease;
   }
 
@@ -316,7 +340,7 @@
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(255, 43, 64, 0.32);
 
-    svg { transform: translateX(3px); }
+    .pi { transform: scale(1.15); }
   }
 
   &:active:not(:disabled) {
@@ -344,10 +368,76 @@
   to { transform: rotate(360deg); }
 }
 
+// ─── Email sent success state ─────────────────────────────────────────────────
+.reg-success {
+  text-align: center;
+  padding: 2.5rem 2rem 2.25rem !important;
+
+  &__icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255, 43, 64, 0.1);
+    border: 1px solid rgba(255, 43, 64, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  &__icon {
+    font-size: 1.75rem;
+    color: #ff2b40;
+  }
+
+  &__title {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 700;
+    font-size: 1.375rem;
+    color: var(--lp-text);
+    letter-spacing: -0.02em;
+    margin: 0 0 0.875rem;
+  }
+
+  &__desc {
+    font-size: 0.9rem;
+    color: var(--lp-muted);
+    line-height: 1.65;
+    margin: 0 0 0.75rem;
+  }
+
+  &__email {
+    color: var(--lp-text);
+    font-weight: 600;
+  }
+
+  &__note {
+    font-size: 0.8rem;
+    color: var(--lp-muted);
+    margin: 0 0 2rem;
+    line-height: 1.5;
+    opacity: 0.8;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ff2b40;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+
+    &:hover { opacity: 0.75; }
+
+    .pi { font-size: 0.8rem; }
+  }
+}
+
 // ─── PrimeNG overrides ────────────────────────────────────────────────────────
 :host ::ng-deep {
 
-  // p-password: style the internal input
   .p-password {
     width: 100%;
 
@@ -387,9 +477,35 @@
 
       &:hover { color: var(--lp-text); }
     }
+
+    // Password strength panel
+    .p-password-panel {
+      background: var(--lp-bg-mid);
+      border: 1px solid var(--lp-divider-strong);
+      border-radius: 10px;
+      box-shadow: var(--lp-card-shadow);
+      padding: 0.875rem 1rem;
+      margin-top: 0.375rem;
+
+      .p-password-meter {
+        margin-bottom: 0.5rem;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--lp-divider-strong);
+
+        .p-password-strength {
+          border-radius: 2px;
+          transition: width 0.3s ease;
+        }
+      }
+
+      .p-password-info {
+        font-size: 0.8rem;
+        color: var(--lp-muted);
+      }
+    }
   }
 
-  // p-message error: strip default chrome
   .p-message.p-message-error {
     background: transparent !important;
     border: none !important;

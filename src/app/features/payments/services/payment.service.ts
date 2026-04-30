@@ -180,6 +180,84 @@ export class PaymentService {
   // ─── CHECK LOGIN ────────────────────────────────────────────────────────────
 
   /**
+   * Chiamato al login di un admin.
+   * Scansiona tutti gli atleti attivi e crea notifiche pagamento_scaduto
+   * per ognuno che non ha comunicato il pagamento del mese corrente (se oggi ≥ 15).
+   * Deduplicato via ref_id.
+   */
+  checkLoginAlertForAdmin(adminId: string): Observable<void> {
+    const today  = new Date();
+    const giorno = today.getDate();
+    if (giorno < 15) return of(undefined);
+
+    const mese = today.getMonth() + 1;
+    const anno = today.getFullYear();
+
+    return from(
+      this.supabase.client
+        .from('profiles')
+        .select('id, nome, cognome')
+        .eq('ruolo', 'atleta')
+        .eq('attivo', true)
+    ).pipe(
+      switchMap(({ data: athletes, error }) => {
+        if (error) throw error;
+        const athleteList = (athletes ?? []) as Pick<ProfileModel, 'id' | 'nome' | 'cognome'>[];
+        if (athleteList.length === 0) return of(undefined);
+
+        const refIds = athleteList.map(a => `payment_late_${a.id}_${anno}_${mese}`);
+
+        return forkJoin({
+          payments: from(
+            this.supabase.client
+              .from('payments')
+              .select('atleta_id, stato')
+              .eq('mese', mese)
+              .eq('anno', anno)
+          ),
+          existingNotifs: from(
+            this.supabase.client
+              .from('notifications')
+              .select('ref_id')
+              .in('ref_id', refIds)
+          ),
+        }).pipe(
+          switchMap(({ payments, existingNotifs }) => {
+            if (payments.error) throw payments.error;
+            if (existingNotifs.error) throw existingNotifs.error;
+
+            const paymentList    = (payments.data ?? []) as Pick<PaymentModel, 'atleta_id' | 'stato'>[];
+            const existingRefIds = new Set((existingNotifs.data ?? []).map(n => n.ref_id as string));
+
+            const toNotify = athleteList.filter(a => {
+              const refId = `payment_late_${a.id}_${anno}_${mese}`;
+              if (existingRefIds.has(refId)) return false;
+              const p = paymentList.find(p => p.atleta_id === a.id);
+              return !p || p.stato === 'non_pagato';
+            });
+
+            if (toNotify.length === 0) return of(undefined);
+
+            const inserts = toNotify.map(a => ({
+              destinatario_id:  adminId,
+              tipo:             'pagamento_scaduto' as const,
+              titolo:           'Pagamento non comunicato',
+              messaggio:        `${a.nome} ${a.cognome} non ha ancora comunicato il pagamento di ${getMeseLabel(mese)} ${anno}.`,
+              ref_id:           `payment_late_${a.id}_${anno}_${mese}`,
+              data_riferimento: `${anno}-${String(mese).padStart(2, '0')}-15`,
+            }));
+
+            return from(
+              this.supabase.client.from('notifications').insert(inserts)
+            ).pipe(map(() => undefined as void));
+          })
+        );
+      }),
+      map(() => undefined)
+    );
+  }
+
+  /**
    * Chiamato al login di un atleta.
    * Se oggi ≥ 15 e il pagamento del mese corrente non è stato comunicato,
    * inserisce una notifica all'admin (deduplicata via ref_id).

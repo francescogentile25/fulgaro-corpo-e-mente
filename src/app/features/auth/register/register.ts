@@ -23,6 +23,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
     InputTextModule, PasswordModule, ButtonModule, MessageModule,
   ],
   templateUrl: './register.html',
+  styleUrl: './register.scss',
 })
 export class Register {
   private authService    = inject(AuthService);

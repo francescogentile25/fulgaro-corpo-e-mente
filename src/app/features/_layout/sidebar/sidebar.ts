@@ -41,7 +41,6 @@ export class Sidebar {
     // Atleta
     { label: 'La mia scheda',  icon: 'pi-calendar',    route: globalPaths.miaSchedaUrl,     atletaOnly: true },
     // Tutti
-    { label: 'Notifiche',      icon: 'pi-bell',        route: globalPaths.notificationsUrl },
     { label: 'Pagamenti',      icon: 'pi-credit-card', route: globalPaths.paymentsUrl },
   ];
 

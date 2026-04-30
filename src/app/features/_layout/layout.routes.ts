@@ -71,11 +71,6 @@ export const layoutRoutes: Routes = [
             loadComponent: () => import('../schedule/athlete-schedule/athlete-schedule').then(c => c.AthleteSchedule),
           },
           {
-            path: 'notifications',
-            canActivate: [authGuard],
-            loadComponent: () => import('../notifications/notifications-page/notifications-page').then(c => c.NotificationsPage),
-          },
-          {
             path: 'payments',
             canActivate: [authGuard],
             loadComponent: () => import('../payments/payments-page/payments-page').then(c => c.PaymentsPage),

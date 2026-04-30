@@ -1,41 +1,70 @@
-<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-  <div class="w-full max-w-md">
+<div class="login-root">
 
-    <!-- Logo / Titolo -->
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-800">Fulgaro</h1>
-      <p class="text-gray-500 mt-1">Corpo & Mente — Running Coach</p>
+  <!-- ── Brand panel (desktop only) ──────────────────────────────── -->
+  <aside class="login-brand" aria-hidden="true">
+    <div class="login-brand__inner">
+      <div class="login-brand__monogram">F</div>
+      <div>
+        <h1 class="login-brand__name">Fulgaro</h1>
+        <p class="login-brand__tagline">Corpo <span>&amp;</span> Mente</p>
+      </div>
+      <p class="login-brand__desc">
+        Allena il corpo.<br>
+        Trasforma la mente.<br>
+        Corri oltre i tuoi limiti.
+      </p>
+    </div>
+    <div class="login-brand__lines" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="login-brand__circles" aria-hidden="true">
+      <span></span>
+    </div>
+  </aside>
+
+  <!-- ── Form panel ───────────────────────────────────────────────── -->
+  <main class="login-panel">
+
+    <!-- Mobile logo -->
+    <div class="login-mobile-logo">
+      <span class="login-mobile-logo__mark">F</span>
+      <div>
+        <p class="login-mobile-logo__name">Fulgaro</p>
+        <p class="login-mobile-logo__sub">Corpo &amp; Mente</p>
+      </div>
     </div>
 
-    <!-- Card -->
-    <div class="bg-white rounded-2xl shadow-lg p-8">
-      <h2 class="text-xl font-semibold text-gray-700 mb-6">Accedi al tuo account</h2>
+    <div class="login-card">
+      <div class="login-card__head">
+        <h2 class="login-card__title">Bentornato</h2>
+        <p class="login-card__sub">Accedi al tuo account per continuare</p>
+      </div>
 
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
 
         <!-- Email -->
-        <div class="flex flex-col gap-1">
-          <label for="email" class="text-sm font-medium text-gray-600">Email</label>
+        <div class="login-field">
+          <label for="email" class="login-label">Email</label>
           <input
             pInputText
             id="email"
             type="email"
             formControlName="email"
             placeholder="nome@email.com"
-            class="w-full"
+            class="login-input"
             [invalid]="form.controls.email.invalid && form.controls.email.touched"
           />
           @if (form.controls.email.invalid && form.controls.email.touched) {
             <p-message severity="error" size="small" variant="simple">
               @if (form.controls.email.errors?.['required']) { Email obbligatoria }
-              @if (form.controls.email.errors?.['email']) { Formato email non valido }
+              @if (form.controls.email.errors?.['email']) { Formato non valido }
             </p-message>
           }
         </div>
 
         <!-- Password -->
-        <div class="flex flex-col gap-1">
-          <label for="password" class="text-sm font-medium text-gray-600">Password</label>
+        <div class="login-field">
+          <label for="password" class="login-label">Password</label>
           <p-password
             id="password"
             formControlName="password"
@@ -52,21 +81,28 @@
         </div>
 
         <!-- Submit -->
-        <p-button
+        <button
           type="submit"
-          label="Accedi"
-          [loading]="authStore.loading()"
+          class="login-submit"
           [disabled]="authStore.loading()"
-          styleClass="w-full mt-2"
-        />
+        >
+          @if (authStore.loading()) {
+            <span class="login-submit__spinner"></span>
+          } @else {
+            <span>Accedi</span>
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          }
+        </button>
 
       </form>
+
+      <p class="login-card__footer">
+        Non hai un account?
+        <a [routerLink]="registerUrl" class="login-card__register-link">Registrati</a>
+      </p>
     </div>
 
-    <p class="text-center text-sm text-gray-500 mt-6">
-      Non hai un account?
-      <a [routerLink]="registerUrl" class="text-indigo-600 font-medium hover:text-indigo-800">Registrati</a>
-    </p>
-
-  </div>
+  </main>
 </div>

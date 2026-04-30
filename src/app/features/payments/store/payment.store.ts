@@ -138,8 +138,15 @@ export const PaymentStore = signalStore(
 
     checkLoginAlert(atletaId: string, atletaNome: string, atletaCognome: string): void {
       service.checkLoginAlert(atletaId, atletaNome, atletaCognome).subscribe({
-        next: () => { /* silenzioso */ },
+        next: () => { notifStore.getAll$(); },
         error: () => { /* non mostrare errori all'utente per questo check */ },
+      });
+    },
+
+    checkLoginAlertForAdmin(adminId: string): void {
+      service.checkLoginAlertForAdmin(adminId).subscribe({
+        next: () => { notifStore.getAll$(); },
+        error: () => { /* silenzioso */ },
       });
     },
   })),
@@ -155,6 +162,7 @@ export const PaymentStore = signalStore(
         if (user.ruolo === 'admin') {
           const today = new Date();
           store.loadForAdmin(today.getMonth() + 1, today.getFullYear());
+          store.checkLoginAlertForAdmin(user.id);
         } else if (user.ruolo === 'atleta') {
           store.loadForAtleta();
           store.checkLoginAlert(user.id, user.nome, user.cognome);

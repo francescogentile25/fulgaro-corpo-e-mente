@@ -7,7 +7,6 @@ const athletesUrl: string      = '/app/athletes';
 const schedeUrl: string        = '/app/schede';
 const miaSchedaUrl: string     = '/app/la-mia-scheda';
 const performanceUrl: string   = '/app/performance';
-const notificationsUrl: string = '/app/notifications';
 const paymentsUrl: string      = '/app/payments';
 const articlesAdminUrl: string = '/app/articoli';
 const articlesPublicUrl: string = '/articoli';
@@ -29,7 +28,6 @@ export const globalPaths = {
   schedeAtletaUrl,
   miaSchedaUrl,
   performanceUrl,
-  notificationsUrl,
   paymentsUrl,
   articlesAdminUrl,
   articlesPublicUrl,

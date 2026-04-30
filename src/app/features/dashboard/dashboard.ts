@@ -6,7 +6,6 @@ import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
 import { AuthStore } from '../auth/store/auth.store';
-import { NotificationStore } from '../notifications/store/notification.store';
 import { PaymentStore } from '../payments/store/payment.store';
 import {
   DashboardService,
@@ -54,7 +53,6 @@ const BASE_CHART_OPTIONS = {
 })
 export class Dashboard implements OnInit {
   authStore        = inject(AuthStore);
-  notifStore       = inject(NotificationStore);
   paymentStore     = inject(PaymentStore);
   dashboardService = inject(DashboardService);
 

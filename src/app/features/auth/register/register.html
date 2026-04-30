@@ -1,61 +1,92 @@
-<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
-  <div class="w-full max-w-md">
+<div class="login-root">
 
-    <!-- Logo -->
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-800">Fulgaro</h1>
-      <p class="text-gray-500 mt-1">Corpo & Mente — Running Coach</p>
+  <!-- ── Brand panel (desktop only) ──────────────────────────────── -->
+  <aside class="login-brand" aria-hidden="true">
+    <div class="login-brand__inner">
+      <div class="login-brand__monogram">F</div>
+      <div>
+        <h1 class="login-brand__name">Fulgaro</h1>
+        <p class="login-brand__tagline">Corpo <span>&amp;</span> Mente</p>
+      </div>
+      <p class="login-brand__desc">
+        Il tuo percorso inizia qui.<br>
+        Unisciti alla community<br>
+        di runner che si allenano con metodo.
+      </p>
+    </div>
+    <div class="login-brand__lines" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="login-brand__circles" aria-hidden="true">
+      <span></span>
+    </div>
+  </aside>
+
+  <!-- ── Form panel ───────────────────────────────────────────────── -->
+  <main class="login-panel">
+
+    <!-- Mobile logo -->
+    <div class="login-mobile-logo">
+      <span class="login-mobile-logo__mark">F</span>
+      <div>
+        <p class="login-mobile-logo__name">Fulgaro</p>
+        <p class="login-mobile-logo__sub">Corpo &amp; Mente</p>
+      </div>
     </div>
 
-    <!-- Stato: email inviata -->
+    <!-- ── Email sent confirmation ───────────────────────────────── -->
     @if (emailSent()) {
-      <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
-        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4">
-          <i class="pi pi-envelope text-emerald-500 text-3xl"></i>
+      <div class="login-card reg-success">
+        <div class="reg-success__icon-wrap">
+          <i class="pi pi-envelope reg-success__icon"></i>
         </div>
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">Controlla la tua email</h2>
-        <p class="text-gray-500 text-sm mb-6">
-          Ti abbiamo inviato un link di conferma a <strong>{{ form.controls.email.value }}</strong>.
-          Clicca il link per attivare l'account, poi accedi.
+        <h2 class="reg-success__title">Controlla la tua email</h2>
+        <p class="reg-success__desc">
+          Abbiamo inviato un link di conferma a<br>
+          <strong class="reg-success__email">{{ form.controls.email.value }}</strong>
         </p>
-        <a
-          [routerLink]="loginUrl"
-          class="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-800"
-        >
-          <i class="pi pi-arrow-left text-xs"></i> Vai al login
+        <p class="reg-success__note">
+          Dopo la conferma, l'amministratore attiverà il tuo profilo.
+        </p>
+        <a [routerLink]="loginUrl" class="reg-success__back">
+          <i class="pi pi-arrow-left"></i>
+          Torna al login
         </a>
       </div>
     }
 
-    <!-- Form registrazione -->
+    <!-- ── Registration form ─────────────────────────────────────── -->
     @if (!emailSent()) {
-      <div class="bg-white rounded-2xl shadow-lg p-8">
-        <h2 class="text-xl font-semibold text-gray-700 mb-6">Crea il tuo account</h2>
+      <div class="login-card">
+        <div class="login-card__head">
+          <h2 class="login-card__title">Crea account</h2>
+          <p class="login-card__sub">Inizia il tuo percorso con Fulgaro</p>
+        </div>
 
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
 
           <!-- Nome + Cognome -->
-          <div class="grid grid-cols-2 gap-3">
-            <div class="flex flex-col gap-1">
-              <label class="text-sm font-medium text-gray-600">Nome *</label>
+          <div class="reg-name-row">
+            <div class="login-field">
+              <label class="login-label">Nome *</label>
               <input
                 pInputText
                 formControlName="nome"
                 placeholder="Mario"
-                class="w-full"
+                class="login-input"
                 [invalid]="form.controls.nome.invalid && form.controls.nome.touched"
               />
               @if (form.controls.nome.invalid && form.controls.nome.touched) {
                 <p-message severity="error" size="small" variant="simple">Obbligatorio</p-message>
               }
             </div>
-            <div class="flex flex-col gap-1">
-              <label class="text-sm font-medium text-gray-600">Cognome *</label>
+            <div class="login-field">
+              <label class="login-label">Cognome *</label>
               <input
                 pInputText
                 formControlName="cognome"
                 placeholder="Rossi"
-                class="w-full"
+                class="login-input"
                 [invalid]="form.controls.cognome.invalid && form.controls.cognome.touched"
               />
               @if (form.controls.cognome.invalid && form.controls.cognome.touched) {
@@ -65,14 +96,14 @@
           </div>
 
           <!-- Email -->
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium text-gray-600">Email *</label>
+          <div class="login-field">
+            <label class="login-label">Email *</label>
             <input
               pInputText
               type="email"
               formControlName="email"
               placeholder="mario.rossi@email.com"
-              class="w-full"
+              class="login-input"
               [invalid]="form.controls.email.invalid && form.controls.email.touched"
             />
             @if (form.controls.email.invalid && form.controls.email.touched) {
@@ -84,8 +115,8 @@
           </div>
 
           <!-- Password -->
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium text-gray-600">Password *</label>
+          <div class="login-field">
+            <label class="login-label">Password *</label>
             <p-password
               formControlName="password"
               placeholder="Min. 6 caratteri"
@@ -104,8 +135,8 @@
           </div>
 
           <!-- Conferma password -->
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium text-gray-600">Conferma password *</label>
+          <div class="login-field">
+            <label class="login-label">Conferma password *</label>
             <p-password
               formControlName="confirmPassword"
               placeholder="Ripeti la password"
@@ -120,28 +151,34 @@
             }
           </div>
 
-          <!-- Note informativa -->
-          <div class="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5 flex gap-2 text-xs text-amber-800">
-            <i class="pi pi-info-circle flex-shrink-0 mt-0.5"></i>
-            <span>Dopo la registrazione il tuo profilo sarà in attesa di attivazione da parte dell'amministratore.</span>
+          <!-- Info note -->
+          <div class="reg-info-note">
+            <i class="pi pi-info-circle reg-info-note__icon"></i>
+            <span>Dopo la registrazione il profilo sarà in attesa di attivazione da parte dell'amministratore.</span>
           </div>
 
-          <p-button
+          <!-- Submit -->
+          <button
             type="submit"
-            label="Crea account"
-            icon="pi pi-user-plus"
-            [loading]="loading()"
-            styleClass="w-full mt-1"
-          />
+            class="login-submit"
+            [disabled]="loading()"
+          >
+            @if (loading()) {
+              <span class="login-submit__spinner"></span>
+            } @else {
+              <span>Crea account</span>
+              <i class="pi pi-user-plus" aria-hidden="true"></i>
+            }
+          </button>
 
         </form>
 
-        <p class="text-center text-sm text-gray-500 mt-6">
+        <p class="login-card__footer">
           Hai già un account?
-          <a [routerLink]="loginUrl" class="text-indigo-600 font-medium hover:text-indigo-800">Accedi</a>
+          <a [routerLink]="loginUrl" class="login-card__register-link">Accedi</a>
         </p>
       </div>
     }
 
-  </div>
+  </main>
 </div>
