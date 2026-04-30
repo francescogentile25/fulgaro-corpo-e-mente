@@ -1,0 +1,209 @@
+.tag-picker {
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+}
+
+/* ──────────────── CONTROL ──────────────── */
+
+.tp-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  cursor: text;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: #cbd5e1;
+  }
+
+  .tag-picker.is-open & {
+    border-color: #94a3b8;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.15);
+  }
+
+  .tag-picker.is-compact & {
+    min-height: 36px;
+    padding: 4px 8px;
+  }
+}
+
+.tp-input {
+  flex: 1;
+  min-width: 130px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.875rem;
+  padding: 4px;
+  color: #0f172a;
+
+  &::placeholder { color: #94a3b8; }
+}
+
+/* ──────────────── PILL ──────────────── */
+
+.tp-pill {
+  --pill-color: #ff8a95;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  background: color-mix(in srgb, var(--pill-color) 14%, transparent);
+  color: color-mix(in srgb, var(--pill-color) 70%, #0f172a 30%);
+  border: 1px solid color-mix(in srgb, var(--pill-color) 35%, transparent);
+  transition: transform 0.15s ease;
+
+  &:hover { transform: translateY(-1px); }
+}
+
+.tp-pill__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--pill-color);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+.tp-pill__name { white-space: nowrap; }
+
+.tp-pill__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 2px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background 0.2s ease;
+
+  i { font-size: 9px; }
+
+  &:hover {
+    opacity: 1;
+    background: color-mix(in srgb, var(--pill-color) 25%, transparent);
+  }
+}
+
+/* ──────────────── DROPDOWN ──────────────── */
+
+.tp-dropdown {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow:
+    0 10px 30px -10px rgba(15, 23, 42, 0.18),
+    0 4px 12px -4px rgba(15, 23, 42, 0.08);
+  padding: 6px;
+  animation: tpFadeIn 0.18s ease-out;
+}
+
+@keyframes tpFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tp-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover { background: #f1f5f9; }
+}
+
+.tp-option__chip {
+  --pill-color: #ff8a95;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #0f172a;
+  font-weight: 500;
+}
+
+.tp-option__icon {
+  font-size: 12px;
+  color: #94a3b8;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  .tp-option:hover & { opacity: 1; }
+}
+
+.tp-empty {
+  padding: 14px 12px;
+  font-size: 0.85rem;
+  color: #64748b;
+  text-align: center;
+}
+
+/* ──────────────── CREATE ROW ──────────────── */
+
+.tp-create {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-top: 4px;
+  border: none;
+  border-top: 1px dashed #e2e8f0;
+  background: linear-gradient(180deg, transparent 0%, rgba(255, 138, 149, 0.04) 100%);
+  text-align: left;
+  font-size: 0.875rem;
+  color: #0f172a;
+  cursor: pointer;
+  border-radius: 0 0 8px 8px;
+  transition: background 0.2s ease;
+
+  i { color: #ff2b40; font-size: 14px; }
+
+  strong { color: #ff2b40; font-weight: 600; }
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 138, 149, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

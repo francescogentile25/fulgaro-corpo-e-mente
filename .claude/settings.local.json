@@ -30,7 +30,13 @@
       "Bash(find /c/Users/francesco.gentile/Desktop/SchedeDamiano -maxdepth 1 -name \"package.json\" -exec head -50 {} \\\\;)",
       "Bash(xargs grep *)",
       "Bash(grep -E \"\\\\.ts$\")",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "mcp__claude_ai_Supabase__list_projects",
+      "mcp__claude_ai_Supabase__list_tables",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "mcp__claude_ai_Supabase__apply_migration",
+      "Bash(node *)",
+      "mcp__claude_ai_Supabase__get_advisors"
     ]
   }
 }

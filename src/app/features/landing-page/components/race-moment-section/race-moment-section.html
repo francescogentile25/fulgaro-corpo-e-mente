@@ -1,48 +1,141 @@
-<section class="race-moment-section bg-lp-bg py-24 lg:py-36">
-  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+<section class="race-moment-section bg-lp-bg py-20 sm:py-24 lg:py-36 overflow-hidden">
 
-    <div class="race-moment-header grid lg:grid-cols-12 gap-6 mb-16 lg:mb-20">
-      <div class="lg:col-span-5">
-        <p class="font-space text-xs uppercase tracking-[0.25em] text-lp-lime mb-6">Cattura l'istante</p>
-        <h2 class="race-moment-headline font-lexend font-black text-lp-text leading-none">
-          MOMENTI<br><span class="text-lp-lime">DI CORSA</span>
+  <div class="race-moment-header max-w-7xl mx-auto px-6 lg:px-12 mb-12 sm:mb-14 lg:mb-20">
+    <div class="grid lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-6">
+        <p class="font-space text-[10px] sm:text-xs uppercase tracking-[0.3em] text-lp-lime mb-4 sm:mb-6 flex items-center gap-3">
+          <span class="inline-block w-6 h-px bg-lp-lime"></span>
+          Cattura l'istante
+        </p>
+        <h2 class="race-moment-headline font-lexend font-black text-lp-text leading-[0.9]">
+          MOMENTI<br><span class="text-lp-lime italic font-light">di corsa</span>
         </h2>
       </div>
-      <div class="lg:col-span-5 lg:col-start-7 flex items-end">
-        <p class="font-lexend font-light text-lp-muted text-lg leading-relaxed">
+      <div class="lg:col-span-5 lg:col-start-8 flex items-end">
+        <p class="font-lexend font-light text-lp-muted text-base sm:text-lg leading-relaxed mt-4 lg:mt-0">
           Ogni gara, ogni allenamento, ogni traguardo è un frammento
           della tua evoluzione come atleta.
         </p>
       </div>
     </div>
+  </div>
 
-    @if (store.entities().length > 0) {
-      <div class="moments-grid grid grid-cols-2 lg:grid-cols-3 auto-rows-[200px] lg:auto-rows-[240px] gap-px">
-        @for (moment of store.entities(); track moment.id) {
-          <div
-            class="moment-cell relative overflow-hidden cursor-pointer group"
-            [class]="moment.span"
+  @if (store.entities().length > 0) {
+    <div class="moments-carousel-wrap relative">
+
+      <div
+        #track
+        class="moments-track flex gap-4 sm:gap-6 lg:gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
+        (scroll)="onScroll()"
+      >
+        <div class="moments-spacer shrink-0" aria-hidden="true"></div>
+
+        @for (moment of store.entities(); track moment.id; let i = $index) {
+          <article
+            class="moment-card snap-center shrink-0 relative group"
+            [attr.data-index]="i"
+            [class.is-active]="activeIndex() === i"
           >
-            <img
-              [src]="moment.image_url"
-              [alt]="moment.label"
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
+            <div class="card-frame relative h-full overflow-hidden">
+              <img
+                [src]="moment.image_url"
+                [alt]="moment.label"
+                class="card-image absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
 
-            <div class="moment-overlay absolute inset-0 transition-opacity duration-400"></div>
+              <div class="card-grain absolute inset-0 pointer-events-none"></div>
+              <div class="card-vignette absolute inset-0 pointer-events-none"></div>
 
-            <div class="absolute inset-0 flex flex-col justify-end p-5 lg:p-8">
-              <p class="font-space text-xs uppercase tracking-widest text-lp-lime mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {{ moment.label }}
-              </p>
-              <p class="font-lexend text-sm text-lp-text leading-snug opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 max-w-xs">
-                {{ moment.description }}
-              </p>
+              <div class="card-corner absolute top-4 left-4 sm:top-5 sm:left-5">
+                <span class="font-space text-[10px] uppercase tracking-[0.25em] text-lp-bg/90 bg-lp-text/30 backdrop-blur px-2.5 py-1 border border-lp-bg/20">
+                  {{ formatIndex(i + 1) }}
+                </span>
+              </div>
+
+              <div class="card-tape"></div>
+
+              <div class="card-content absolute inset-x-0 bottom-0 p-5 sm:p-7 lg:p-8 flex flex-col">
+                <div class="flex items-center gap-2 mb-2 sm:mb-3">
+                  <span class="inline-block w-8 h-px bg-lp-lime"></span>
+                  <p class="font-space text-[10px] sm:text-xs uppercase tracking-[0.28em] text-lp-lime">
+                    {{ moment.label }}
+                  </p>
+                </div>
+                <p class="font-lexend font-light text-sm sm:text-base lg:text-lg text-white leading-snug max-w-md">
+                  {{ moment.description }}
+                </p>
+              </div>
+            </div>
+          </article>
+        }
+
+        <div class="moments-spacer shrink-0" aria-hidden="true"></div>
+      </div>
+
+      <div class="moments-controls max-w-7xl mx-auto px-6 lg:px-12 mt-8 sm:mt-10 lg:mt-12">
+        <div class="flex items-center justify-between gap-6">
+
+          <div class="flex items-center gap-3 sm:gap-5">
+            <button
+              type="button"
+              class="ctrl-btn"
+              [attr.aria-label]="'Precedente'"
+              [disabled]="activeIndex() === 0"
+              (click)="prev()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="ctrl-btn"
+              [attr.aria-label]="'Successivo'"
+              [disabled]="activeIndex() === store.entities().length - 1"
+              (click)="next()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="flex-1 flex items-center gap-4 sm:gap-6">
+            <div class="font-space text-xs sm:text-sm text-lp-text tabular-nums tracking-wider">
+              <span class="text-lp-lime font-semibold">{{ formatIndex(activeIndex() + 1) }}</span>
+              <span class="text-lp-muted mx-1">/</span>
+              <span class="text-lp-muted">{{ formatIndex(store.entities().length) }}</span>
+            </div>
+
+            <div class="progress-rail relative flex-1 h-px bg-lp-divider-strong overflow-hidden">
+              <span
+                class="progress-fill absolute left-0 top-0 h-full bg-lp-lime"
+                [style.width.%]="progressPct()"
+              ></span>
             </div>
           </div>
-        }
-      </div>
-    }
 
-  </div>
+          <div class="hidden sm:flex items-center gap-1.5">
+            @for (m of store.entities(); track m.id; let i = $index) {
+              <button
+                type="button"
+                class="dot"
+                [class.dot-active]="activeIndex() === i"
+                [attr.aria-label]="'Vai a slide ' + (i + 1)"
+                (click)="goTo(i)"
+              ></button>
+            }
+          </div>
+        </div>
+
+        <div class="mt-5 sm:hidden">
+          <p class="font-space text-[10px] uppercase tracking-[0.3em] text-lp-muted text-center">
+            <span class="inline-block align-middle mr-2">←</span> swipe <span class="inline-block align-middle ml-2">→</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  }
 </section>

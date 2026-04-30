@@ -12,6 +12,9 @@ import { ArticlesService } from '../services/articles.service';
 import { ArticlesStore } from '../store/articles.store';
 import { AuthStore } from '../../auth/store/auth.store';
 import { Article, ArticleStatus, slugify } from '../models/article.model';
+import { TagPicker } from '../../tags/components/tag-picker/tag-picker';
+import { TagsService } from '../../tags/services/tags.service';
+import { Tag } from '../../tags/models/tag.model';
 
 @Component({
   selector: 'app-article-editor-page',
@@ -19,6 +22,7 @@ import { Article, ArticleStatus, slugify } from '../models/article.model';
   imports: [
     RouterLink, FormsModule, ButtonModule, InputTextModule,
     TextareaModule, ToggleSwitchModule, TooltipModule, TiptapEditor,
+    TagPicker,
   ],
   templateUrl: './article-editor-page.html',
   styleUrl: './article-editor-page.scss',
@@ -27,6 +31,7 @@ export class ArticleEditorPage implements OnInit {
   private route          = inject(ActivatedRoute);
   private router         = inject(Router);
   private articlesService = inject(ArticlesService);
+  private tagsService    = inject(TagsService);
   private store          = inject(ArticlesStore);
   private authStore      = inject(AuthStore);
   private messageService = inject(MessageService);
@@ -43,6 +48,7 @@ export class ArticleEditorPage implements OnInit {
   excerpt     = signal('');
   coverImage  = signal<string | null>(null);
   publish     = signal(false);
+  selectedTags = signal<Tag[]>([]);
   contentJson: any = null;
   contentHtml = '';
 
@@ -85,6 +91,7 @@ export class ArticleEditorPage implements OnInit {
         this.excerpt.set(a.excerpt ?? '');
         this.coverImage.set(a.cover_image);
         this.publish.set(a.status === 'published');
+        this.selectedTags.set(a.tags ?? []);
         this.contentJson = a.content;
         this.contentHtml = a.content_html ?? '';
         this.initialContent.set(a.content);
@@ -141,13 +148,20 @@ export class ArticleEditorPage implements OnInit {
 
     this.saving.set(true);
 
+    const tagIds = this.selectedTags().map(t => t.id);
+
     if (this.isEdit()) {
       this.articlesService.edit({
         id: this.articleId()!,
         ...basePayload,
         published_at: status === 'published' ? nowIso : null,
       }).subscribe({
-        next: (updated) => this.onSaved(updated, 'Articolo aggiornato'),
+        next: async (updated) => {
+          try {
+            await this.tagsService.setArticleTags(updated.id, tagIds);
+            this.onSaved(updated, 'Articolo aggiornato');
+          } catch (err) { this.onSaveError(err); }
+        },
         error: (err) => this.onSaveError(err),
       });
     } else {
@@ -156,10 +170,19 @@ export class ArticleEditorPage implements OnInit {
         author_id:    user.id,
         published_at: status === 'published' ? nowIso : null,
       } as any).subscribe({
-        next: (created) => this.onSaved(created, 'Articolo creato'),
+        next: async (created) => {
+          try {
+            await this.tagsService.setArticleTags(created.id, tagIds);
+            this.onSaved(created, 'Articolo creato');
+          } catch (err) { this.onSaveError(err); }
+        },
         error: (err) => this.onSaveError(err),
       });
     }
+  }
+
+  protected onTagsChange(tags: Tag[]): void {
+    this.selectedTags.set(tags);
   }
 
   private onSaved(a: Article, msg: string): void {

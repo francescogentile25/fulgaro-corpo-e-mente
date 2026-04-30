@@ -1,0 +1,38 @@
+.tag-pill {
+  --pill-color: #ff8a95;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--pill-color) 14%, transparent);
+  color: color-mix(in srgb, var(--pill-color) 70%, #0f172a 30%);
+  border: 1px solid color-mix(in srgb, var(--pill-color) 35%, transparent);
+}
+.tag-pill__dot {
+  width: 7px; height: 7px;
+  border-radius: 999px;
+  background: var(--pill-color);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.6);
+}
+.tag-pill--preview {
+  padding: 8px 18px;
+  font-size: 0.95rem;
+}
+.color-swatch {
+  width: 32px; height: 32px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+  &:hover { transform: scale(1.1); }
+
+  &.is-active {
+    border-color: #0f172a;
+    transform: scale(1.15);
+  }
+}

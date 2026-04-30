@@ -11,6 +11,7 @@ const paymentsUrl: string      = '/app/payments';
 const articlesAdminUrl: string = '/app/articoli';
 const articlesPublicUrl: string = '/articoli';
 const raceMomentsAdminUrl: string = '/app/momenti-corsa';
+const tagsAdminUrl: string         = '/app/tag';
 
 const schedeAtletaUrl    = (atletaId: string): string => `${schedeUrl}/${atletaId}`;
 const articleEditUrl     = (id: string): string => `${articlesAdminUrl}/${id}/modifica`;
@@ -32,6 +33,7 @@ export const globalPaths = {
   articlesAdminUrl,
   articlesPublicUrl,
   raceMomentsAdminUrl,
+  tagsAdminUrl,
   articleEditUrl,
   articleNewUrl,
   articlePublicUrl,

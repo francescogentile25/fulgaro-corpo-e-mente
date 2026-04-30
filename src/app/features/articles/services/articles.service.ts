@@ -3,8 +3,23 @@ import { from, map, Observable } from 'rxjs';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { BaseEntityService } from '../../../core/store/base.store';
 import { Article, ArticleCreateRequest, ArticleUpdateRequest } from '../models/article.model';
+import { Tag } from '../../tags/models/tag.model';
 
 const BUCKET = 'article-images';
+
+const SELECT_WITH_TAGS = '*, article_tags(tag:tags(*))';
+
+interface ArticleRowWithJoin extends Omit<Article, 'tags'> {
+  article_tags?: Array<{ tag: Tag | null }>;
+}
+
+function flattenTags(row: ArticleRowWithJoin): Article {
+  const tags = (row.article_tags ?? [])
+    .map(at => at.tag)
+    .filter((t): t is Tag => !!t);
+  const { article_tags, ...rest } = row;
+  return { ...rest, tags };
+}
 
 @Injectable({ providedIn: 'root' })
 export class ArticlesService implements BaseEntityService<Article, ArticleCreateRequest, ArticleUpdateRequest> {
@@ -17,12 +32,12 @@ export class ArticlesService implements BaseEntityService<Article, ArticleCreate
     return from(
       this.supabase.client
         .from('articles')
-        .select('*')
+        .select(SELECT_WITH_TAGS)
         .order('created_at', { ascending: false })
     ).pipe(
       map(({ data, error }) => {
         if (error) throw error;
-        return (data ?? []) as Article[];
+        return ((data ?? []) as unknown as ArticleRowWithJoin[]).map(flattenTags);
       })
     );
   }
@@ -30,14 +45,14 @@ export class ArticlesService implements BaseEntityService<Article, ArticleCreate
   getPublished(limit?: number): Observable<Article[]> {
     let q = this.supabase.client
       .from('articles')
-      .select('*')
+      .select(SELECT_WITH_TAGS)
       .eq('status', 'published')
       .order('published_at', { ascending: false });
     if (limit) q = q.limit(limit);
     return from(q).pipe(
       map(({ data, error }) => {
         if (error) throw error;
-        return (data ?? []) as Article[];
+        return ((data ?? []) as unknown as ArticleRowWithJoin[]).map(flattenTags);
       })
     );
   }
@@ -46,13 +61,14 @@ export class ArticlesService implements BaseEntityService<Article, ArticleCreate
     return from(
       this.supabase.client
         .from('articles')
-        .select('*')
+        .select(SELECT_WITH_TAGS)
         .eq('slug', slug)
         .maybeSingle()
     ).pipe(
       map(({ data, error }) => {
         if (error) throw error;
-        return data as Article | null;
+        if (!data) return null;
+        return flattenTags(data as unknown as ArticleRowWithJoin);
       })
     );
   }
@@ -61,13 +77,13 @@ export class ArticlesService implements BaseEntityService<Article, ArticleCreate
     return from(
       this.supabase.client
         .from('articles')
-        .select('*')
+        .select(SELECT_WITH_TAGS)
         .eq('id', id)
         .single()
     ).pipe(
       map(({ data, error }) => {
         if (error) throw error;
-        return data as Article;
+        return flattenTags(data as unknown as ArticleRowWithJoin);
       })
     );
   }

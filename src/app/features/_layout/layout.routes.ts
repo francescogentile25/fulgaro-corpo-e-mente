@@ -81,6 +81,12 @@ export const layoutRoutes: Routes = [
             canActivate: [adminGuard],
             loadComponent: () => import('../race-moments/race-moments-admin-page/race-moments-admin-page').then(c => c.RaceMomentsAdminPage)
           },
+          // Tag (admin)
+          {
+            path: 'tag',
+            canActivate: [adminGuard],
+            loadComponent: () => import('../tags/tags-admin-page/tags-admin-page').then(c => c.TagsAdminPage)
+          },
           // Articoli (admin)
           {
             path: 'articoli',

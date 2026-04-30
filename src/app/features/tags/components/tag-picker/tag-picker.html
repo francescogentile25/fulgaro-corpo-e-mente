@@ -1,0 +1,77 @@
+<div #rootEl class="tag-picker" [class.is-open]="open()" [class.is-compact]="compact()">
+
+  <div class="tp-control" (click)="focusInput()">
+
+    @for (tag of internalSelected(); track tag.id) {
+      <span class="tp-pill tp-pill--selected"
+            [style.--pill-color]="tag.color">
+        <span class="tp-pill__dot"></span>
+        <span class="tp-pill__name">{{ tag.name }}</span>
+        <button type="button" class="tp-pill__remove"
+                aria-label="Rimuovi tag"
+                (click)="remove(tag, $event)">
+          <i class="pi pi-times"></i>
+        </button>
+      </span>
+    }
+
+    <input
+      #searchInput
+      type="text"
+      class="tp-input"
+      [placeholder]="internalSelected().length === 0 ? 'Cerca o crea un tag…' : ''"
+      [ngModel]="query()"
+      (ngModelChange)="query.set($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keydown)="onKeyDown($event)"
+    />
+  </div>
+
+  @if (open()) {
+    <div class="tp-dropdown">
+
+      @if (availableTags().length > 0) {
+        <ul class="tp-list" role="listbox">
+          @for (tag of availableTags(); track tag.id) {
+            <li class="tp-option"
+                role="option"
+                (mousedown)="$event.preventDefault()"
+                (click)="toggle(tag); query.set('')">
+              <span class="tp-option__chip" [style.--pill-color]="tag.color">
+                <span class="tp-pill__dot"></span>
+                <span>{{ tag.name }}</span>
+              </span>
+              <i class="pi pi-plus tp-option__icon"></i>
+            </li>
+          }
+        </ul>
+      } @else if (!canCreateNew()) {
+        <div class="tp-empty">
+          @if (query().trim()) {
+            Tag già selezionato.
+          } @else if (store.entities().length === 0) {
+            Nessun tag disponibile. Inizia a digitare per crearne uno.
+          } @else {
+            Tutti i tag sono stati selezionati.
+          }
+        </div>
+      }
+
+      @if (canCreateNew()) {
+        <button type="button"
+                class="tp-create"
+                [disabled]="creating()"
+                (mousedown)="$event.preventDefault()"
+                (click)="createInline()">
+          @if (creating()) {
+            <i class="pi pi-spin pi-spinner"></i>
+          } @else {
+            <i class="pi pi-plus-circle"></i>
+          }
+          <span>Crea «<strong>{{ query() }}</strong>»</span>
+        </button>
+      }
+    </div>
+  }
+</div>

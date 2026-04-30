@@ -1,3 +1,5 @@
+import { Tag } from '../../tags/models/tag.model';
+
 export type ArticleStatus = 'draft' | 'published';
 
 export interface Article {
@@ -13,6 +15,7 @@ export interface Article {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  tags?: Tag[];
 }
 
 export type ArticleCreateRequest = Omit<Article, 'id' | 'created_at' | 'updated_at'>;

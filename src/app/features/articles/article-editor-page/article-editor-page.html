@@ -47,6 +47,17 @@
                   [ngModel]="excerpt()" (ngModelChange)="excerpt.set($event)"></textarea>
       </div>
 
+      <!-- Tag -->
+      <div>
+        <label class="block text-sm font-medium mb-1">
+          Tag <span class="text-xs text-slate-500 font-normal">— digita per cercare o creare un nuovo tag</span>
+        </label>
+        <app-tag-picker
+          [selected]="selectedTags()"
+          (selectedChange)="onTagsChange($event)">
+        </app-tag-picker>
+      </div>
+
       <!-- Cover -->
       <div>
         <label class="block text-sm font-medium mb-1">Immagine di copertina</label>

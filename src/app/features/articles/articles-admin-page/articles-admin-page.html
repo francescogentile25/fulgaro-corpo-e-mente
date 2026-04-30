@@ -35,6 +35,15 @@
             <div class="min-w-0">
               <div class="font-medium truncate">{{ a.title }}</div>
               <div class="text-xs text-slate-500 truncate">/{{ a.slug }}</div>
+              @if (a.tags && a.tags.length > 0) {
+                <div class="flex flex-wrap gap-1 mt-1.5">
+                  @for (t of a.tags; track t.id) {
+                    <span class="art-tag-pill" [style.--pill-color]="t.color">
+                      <span class="art-tag-pill__dot"></span>{{ t.name }}
+                    </span>
+                  }
+                </div>
+              }
             </div>
           </div>
         </td>
