@@ -3,20 +3,23 @@ import {
   Component,
   ElementRef,
   OnDestroy,
+  signal,
 } from '@angular/core';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { BookingModal } from '../booking-modal/booking-modal';
 
 gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'app-cta-section',
-  imports: [],
+  imports: [BookingModal],
   templateUrl: './cta-section.html',
   styleUrl: './cta-section.scss',
 })
 export class CtaSection implements OnDestroy {
   private ctx!: gsap.Context;
+  modalOpen = signal(false);
 
   constructor(private el: ElementRef) {
     afterNextRender(() => {

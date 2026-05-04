@@ -19,7 +19,10 @@
       </p>
 
       <div class="cta-buttons flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
-        <button class="cta-primary font-lexend font-semibold text-sm uppercase tracking-widest px-10 py-5 text-white transition-transform duration-200 hover:scale-105">
+        <button
+          class="cta-primary font-lexend font-semibold text-sm uppercase tracking-widest px-10 py-5 text-white transition-transform duration-200 hover:scale-105"
+          (click)="modalOpen.set(true)"
+        >
           Prenota Valutazione Gratuita
         </button>
         <button class="cta-secondary font-lexend font-semibold text-sm uppercase tracking-widest px-10 py-5 text-lp-lime transition-all duration-200 hover:bg-lp-divider">
@@ -35,3 +38,5 @@
 
   <div class="cta-bg-image absolute inset-0 pointer-events-none"></div>
 </section>
+
+<app-booking-modal [open]="modalOpen()" (close)="modalOpen.set(false)" />

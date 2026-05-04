@@ -1,0 +1,62 @@
+@if (open) {
+  <div class="modal-backdrop" (click)="onBackdrop($event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+
+      <button class="modal-close" (click)="close.emit()" aria-label="Chiudi">✕</button>
+
+      @if (state() === 'success') {
+        <div class="modal-success">
+          <div class="success-icon">✓</div>
+          <h3>Richiesta inviata!</h3>
+          <p>Ti risponderemo entro 24 ore.</p>
+        </div>
+      } @else {
+        <header class="modal-header">
+          <p class="modal-kicker">Fulgaro Corpo e Mente</p>
+          <h2 id="modal-title">Prenota la tua valutazione gratuita</h2>
+          <p class="modal-sub">Compila il form e ti contatteremo entro 24 ore.</p>
+        </header>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="form-row">
+            <div class="form-field" [class.field-error]="hasError('nome')">
+              <label for="bk-nome">Nome</label>
+              <input id="bk-nome" type="text" formControlName="nome" placeholder="Mario" autocomplete="given-name" />
+              @if (hasError('nome')) { <span class="error-msg">Campo obbligatorio</span> }
+            </div>
+            <div class="form-field" [class.field-error]="hasError('cognome')">
+              <label for="bk-cognome">Cognome</label>
+              <input id="bk-cognome" type="text" formControlName="cognome" placeholder="Rossi" autocomplete="family-name" />
+              @if (hasError('cognome')) { <span class="error-msg">Campo obbligatorio</span> }
+            </div>
+          </div>
+
+          <div class="form-field" [class.field-error]="hasError('email')">
+            <label for="bk-email">Email</label>
+            <input id="bk-email" type="email" formControlName="email" placeholder="mario.rossi@email.com" autocomplete="email" />
+            @if (hasError('email')) { <span class="error-msg">Email non valida</span> }
+          </div>
+
+          <div class="form-field" [class.field-error]="hasError('messaggio')">
+            <label for="bk-msg">Messaggio</label>
+            <textarea id="bk-msg" formControlName="messaggio" rows="4" placeholder="Raccontaci i tuoi obiettivi…"></textarea>
+            @if (hasError('messaggio')) { <span class="error-msg">Campo obbligatorio</span> }
+          </div>
+
+          @if (state() === 'error') {
+            <p class="send-error">Errore durante l'invio. Riprova o contattaci direttamente.</p>
+          }
+
+          <button type="submit" class="submit-btn" [disabled]="state() === 'loading'">
+            @if (state() === 'loading') {
+              <span class="spinner"></span> Invio in corso…
+            } @else {
+              Invia richiesta
+            }
+          </button>
+        </form>
+      }
+
+    </div>
+  </div>
+}
