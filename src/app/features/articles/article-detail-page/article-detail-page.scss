@@ -66,6 +66,36 @@
       letter-spacing: .15em;
       font-weight: 600;
     }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .detail-tag {
+      --pill-color: #ff8a95;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: .72rem;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: color-mix(in srgb, var(--pill-color) 16%, transparent);
+      color: color-mix(in srgb, var(--pill-color) 60%, #fff 40%);
+      border: 1px solid color-mix(in srgb, var(--pill-color) 35%, transparent);
+    }
+
+    .detail-tag__dot {
+      width: 5px; height: 5px;
+      border-radius: 999px;
+      background: var(--pill-color);
+      flex-shrink: 0;
+    }
   }
 
   .body {

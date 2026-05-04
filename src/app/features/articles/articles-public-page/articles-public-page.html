@@ -18,8 +18,21 @@
       } @else if (articles().length === 0) {
         <div class="empty">Nessun articolo ancora pubblicato.</div>
       } @else {
+        @if (allTags().length > 0) {
+          <div class="tag-filter">
+            <button class="tag-btn" [class.active]="selectedTags().size === 0" (click)="selectedTags.set(emptySet)">Tutti</button>
+            @for (t of allTags(); track t.id) {
+              <button class="tag-btn" [style.--pill-color]="t.color" [class.active]="selectedTags().has(t.id)" (click)="toggleTag(t.id)">
+                <span class="tag-btn__dot"></span>{{ t.name }}
+              </button>
+            }
+          </div>
+        }
+        @if (filteredArticles().length === 0) {
+          <div class="empty">Nessun articolo per questo tag.</div>
+        }
         <div class="grid">
-          @for (a of articles(); track a.id) {
+          @for (a of filteredArticles(); track a.id) {
             <a class="card" [routerLink]="['/articoli', a.slug]">
               @if (a.cover_image) {
                 <div class="cover"><img [src]="a.cover_image" [alt]="a.title" /></div>

@@ -18,6 +18,15 @@
         <a class="back" routerLink="/articoli">← Tutti gli articoli</a>
         <h1>{{ a.title }}</h1>
         <time>{{ a.published_at | date:'dd MMMM yyyy' }}</time>
+        @if (a.tags && a.tags.length > 0) {
+          <div class="detail-tags">
+            @for (t of a.tags; track t.id) {
+              <span class="detail-tag" [style.--pill-color]="t.color">
+                <span class="detail-tag__dot"></span>{{ t.name }}
+              </span>
+            }
+          </div>
+        }
       </header>
 
       <div class="body" [innerHTML]="body()"></div>

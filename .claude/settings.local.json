@@ -36,7 +36,8 @@
       "mcp__claude_ai_Supabase__execute_sql",
       "mcp__claude_ai_Supabase__apply_migration",
       "Bash(node *)",
-      "mcp__claude_ai_Supabase__get_advisors"
+      "mcp__claude_ai_Supabase__get_advisors",
+      "Bash(grep -E \"\\\\.\\(ts|html\\)$\")"
     ]
   }
 }

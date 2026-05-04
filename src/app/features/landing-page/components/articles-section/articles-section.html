@@ -16,6 +16,15 @@
               <time>{{ a.published_at | date:'dd MMM yyyy' }}</time>
               <h3>{{ a.title }}</h3>
               @if (a.excerpt) { <p>{{ a.excerpt }}</p> }
+              @if (a.tags && a.tags.length > 0) {
+                <div class="card-tags">
+                  @for (t of a.tags; track t.id) {
+                    <span class="card-tag" [style.--pill-color]="t.color">
+                      <span class="card-tag__dot"></span>{{ t.name }}
+                    </span>
+                  }
+                </div>
+              }
             </div>
           </a>
         }
