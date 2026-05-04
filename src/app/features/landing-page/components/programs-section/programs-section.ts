@@ -59,6 +59,22 @@ export class ProgramsSection implements OnDestroy {
       ],
       idealFor: 'Chi ha obiettivi specifici, preferisce un\'attenzione dedicata o ha esigenze di orario e location particolari.',
     },
+    {
+      id: 'online',
+      icon: 'pi pi-video',
+      title: 'ALLENAMENTO ONLINE',
+      subtitle: 'Ovunque tu sia',
+      description:
+        'La distanza non è un ostacolo. Il programma online porta il metodo Fulgaro direttamente dove vuoi tu: piani di allenamento su misura, analisi video della tecnica di corsa e check-in settimanali per monitorare i progressi. Stessa qualità del coaching in presenza, massima flessibilità di orari e location.',
+      highlights: [
+        'Piano personalizzato aggiornato ogni settimana',
+        'Analisi video della tecnica tramite registrazioni inviate dal runner',
+        'Check-in settimanali via messaggi e videocall',
+        'Accesso a libreria di esercizi e routine di forza specifica',
+        'Supporto continuo su canale dedicato 7 giorni su 7',
+      ],
+      idealFor: 'Chi vive fuori Roma, ha orari difficili o viaggia spesso e vuole comunque un percorso strutturato e seguito da un coach certificato.',
+    },
   ];
 
   private ctx!: gsap.Context;

@@ -9,6 +9,7 @@ import { RaceMomentSection } from './components/race-moment-section/race-moment-
 import { CtaSection } from './components/cta-section/cta-section';
 import { LandingFooter } from './components/landing-footer/landing-footer';
 import { ArticlesSection } from './components/articles-section/articles-section';
+import { SocialStrip } from './components/social-strip/social-strip';
 
 @Component({
   selector: 'app-landing-page',
@@ -21,6 +22,7 @@ import { ArticlesSection } from './components/articles-section/articles-section'
     LocationsSection,
     RaceMomentSection,
     ArticlesSection,
+    SocialStrip,
     CtaSection,
     LandingFooter,
   ],

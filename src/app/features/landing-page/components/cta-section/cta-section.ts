@@ -51,6 +51,10 @@ export class CtaSection implements OnDestroy {
     }, this.el.nativeElement);
   }
 
+  scrollToLocations(): void {
+    document.getElementById('dove-alleno')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
   ngOnDestroy(): void {
     this.ctx?.revert();
   }

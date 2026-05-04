@@ -1,0 +1,46 @@
+<section class="social-strip">
+
+  <div class="strip-bg">
+    <div class="strip-glow strip-glow--l"></div>
+    <div class="strip-glow strip-glow--r"></div>
+    <div class="strip-noise"></div>
+  </div>
+
+  <div class="strip-inner">
+
+    <div class="strip-head">
+      <span class="strip-eyebrow">Resta in contatto</span>
+      <h2 class="strip-title">
+        <span class="strip-title__main">FULGARO</span>
+        <span class="strip-title__sub">SUI SOCIAL</span>
+      </h2>
+      <p class="strip-desc">Contenuti esclusivi, sessioni in diretta e una community che corre insieme.</p>
+    </div>
+
+    <div class="cards">
+      @for (s of socials; track s.platform; let i = $index) {
+        <a class="scard" [href]="s.href" target="_blank" rel="noopener noreferrer" [style.--accent]="s.accent" [style.--delay]="i * 0.1 + 's'">
+          <div class="scard__glow"></div>
+          <div class="scard__top">
+            <div class="scard__icon-wrap">
+              <i [class]="s.icon + ' scard__icon'"></i>
+            </div>
+            <div class="scard__meta">
+              <span class="scard__platform">{{ s.platform }}</span>
+              <span class="scard__handle">{{ s.handle }}</span>
+            </div>
+          </div>
+          <p class="scard__copy">{{ s.copy }}</p>
+          <div class="scard__cta">
+            <span>{{ s.cta }}</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </a>
+      }
+    </div>
+
+  </div>
+
+</section>
